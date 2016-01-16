@@ -89,12 +89,14 @@ public class IPAddressStats implements Serializable {
     }
 
     private void writeTo(String[] args, List<Tuple2<String, Integer>> output) {
-
+        for (Tuple2<?, ?> tuple : output) {
+            LOG.info("[ spark out ] " + tuple._1() + "\t" + tuple._2());
+        }
     }
 
 
     public static void main(String[] args) {
-        // ./bin/run-my-java-example org.shirdrn.spark.job.IPAddressStats spark://m1:7077 hdfs://m1:9000/user/shirdrn/wwwlog20140222.log /home/shirdrn/cloud/programs/spark-0.9.0-incubating-bin-hadoop1/java-examples/GeoIP_DATABASE.dat
+        // ./bin/run-example com.hzy.spark.IPAddressStats spark://master:7077 hdfs://master:8020/spark/test.txt /home/hzy/tmp/spark/GeoIP_DATABASE.dat
         if (args.length < 3) {
             System.err.println("Usage: IPAddressStats <master> <inFile> <GeoIPFile>");
             System.err.println("    Example: org.shirdrn.spark.job.IPAddressStats spark://m1:7077 hdfs://m1:9000/user/shirdrn/wwwlog20140222.log /home/shirdrn/cloud/programs/spark-0.9.0-incubating-bin-hadoop1/java-examples/GeoIP_DATABASE.dat");

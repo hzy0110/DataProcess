@@ -27,41 +27,41 @@ public class WordCount {
     public static void main(String[] args) throws Exception {
 
         */
-/************************ ÒÔÏÂ´úÂëÆ¬¶Î¿É±»ËùÓÐApp¹²ÓÃ ****************************//*
+/************************ ä»¥ä¸‹ä»£ç ç‰‡æ®µå¯è¢«æ‰€æœ‰Appå…±ç”¨ ****************************//*
 
 
-        // ÉèÖÃApp·ÃÎÊSparkÊ¹ÓÃµÄÓÃ»§Ãû£ºARCH
+        // è®¾ç½®Appè®¿é—®Sparkä½¿ç”¨çš„ç”¨æˆ·åï¼šARCH
         System.setProperty("user.name", "ARCH");
 
-        // ÉèÖÃApp·ÃÎÊHadoopÊ¹ÓÃµÄÓÃ»§Ãû£ºARCH
+        // è®¾ç½®Appè®¿é—®Hadoopä½¿ç”¨çš„ç”¨æˆ·åï¼šARCH
         System.setProperty("HADOOP_USER_NAME", "ARCH");
 
-        // ÔÚ½«Òª´«µÝ¸øExecutorµÄ»·¾³ÖÐÉèÖÃExecutor·ÃÎÊHadoopÊ¹ÓÃµÄÓÃ»§Ãû£ºARCH
+        // åœ¨å°†è¦ä¼ é€’ç»™Executorçš„çŽ¯å¢ƒä¸­è®¾ç½®Executorè®¿é—®Hadoopä½¿ç”¨çš„ç”¨æˆ·åï¼šARCH
         Map<String, String> envs = new HashMap<String, String>();
         envs.put("HADOOP_USER_NAME", "ARCH");
 
-        // ÎªAppµÄÃ¿¸öExecutorÅäÖÃ×î¶à¿ÉÒÔÊ¹ÓÃµÄÄÚ´æÁ¿£º2GB
+        // ä¸ºAppçš„æ¯ä¸ªExecutoré…ç½®æœ€å¤šå¯ä»¥ä½¿ç”¨çš„å†…å­˜é‡ï¼š2GB
         System.setProperty("spark.executor.memory", "2g");
 
-        // ÎªAppµÄËùÓÐExecutorÅäÖÃ¹²¼Æ×î¶à¿ÉÒÔÊ¹ÓÃµÄCoreÊýÁ¿£¨×î´ó²¢ÐÐÈÎÎñÊý£©£º20
+        // ä¸ºAppçš„æ‰€æœ‰Executoré…ç½®å…±è®¡æœ€å¤šå¯ä»¥ä½¿ç”¨çš„Coreæ•°é‡ï¼ˆæœ€å¤§å¹¶è¡Œä»»åŠ¡æ•°ï¼‰ï¼š20
         System.setProperty("spark.cores.max", "20");
 
-        // »ñÈ¡Òª·Ö·¢µ½¼¯Èº¸÷½áµãµÄJarÎÄ¼þ
-        // ´ËÀý²ßÂÔ£ºÈôÖ¸¶¨Â·¾¶ÎªÎÄ¼þ£¬Ôò·µ»Ø¸ÃÎÄ¼þ£»ÈôÖ¸¶¨Â·¾¶ÎªÄ¿Â¼£¬ÔòÁÐ¾ÙÄ¿Â¼ÏÂËùÓÐÎÄ¼þ
+        // èŽ·å–è¦åˆ†å‘åˆ°é›†ç¾¤å„ç»“ç‚¹çš„Jaræ–‡ä»¶
+        // æ­¤ä¾‹ç­–ç•¥ï¼šè‹¥æŒ‡å®šè·¯å¾„ä¸ºæ–‡ä»¶ï¼Œåˆ™è¿”å›žè¯¥æ–‡ä»¶ï¼›è‹¥æŒ‡å®šè·¯å¾„ä¸ºç›®å½•ï¼Œåˆ™åˆ—ä¸¾ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶
         String[] jars = getApplicationLibrary();
 
-        // »ñÈ¡SparkÉÏÏÂÎÄ¶ÔÏó¡ª¡ª·ÃÎÊSparkµÄÆðµã¡£¹¹Ôì·½·¨¸÷²ÎÊýµÄÒâÒå·Ö±ðÎª£º
-        // 1 Spark Master½áµãµÄµØÖ·£»2 AppµÄÃû³Æ£»
-        // 3 Spark¸÷Worker½áµãµÄSpark²¿ÊðÄ¿Â¼£¬¸÷½áµãÏàÍ¬£»4 ´ý·Ö·¢µ½¼¯Èº¸÷½áµãµÄJarÎÄ¼þ£»
-        // 5 ´ý´«µÝ¸øExecutor»·¾³£¨½öMapÖÐµÄ²¿·ÖKeyÓÐÐ§£©
+        // èŽ·å–Sparkä¸Šä¸‹æ–‡å¯¹è±¡â€”â€”è®¿é—®Sparkçš„èµ·ç‚¹ã€‚æž„é€ æ–¹æ³•å„å‚æ•°çš„æ„ä¹‰åˆ†åˆ«ä¸ºï¼š
+        // 1 Spark Masterç»“ç‚¹çš„åœ°å€ï¼›2 Appçš„åç§°ï¼›
+        // 3 Sparkå„Workerç»“ç‚¹çš„Sparkéƒ¨ç½²ç›®å½•ï¼Œå„ç»“ç‚¹ç›¸åŒï¼›4 å¾…åˆ†å‘åˆ°é›†ç¾¤å„ç»“ç‚¹çš„Jaræ–‡ä»¶ï¼›
+        // 5 å¾…ä¼ é€’ç»™ExecutorçŽ¯å¢ƒï¼ˆä»…Mapä¸­çš„éƒ¨åˆ†Keyæœ‰æ•ˆï¼‰
         JavaSparkContext context = new JavaSparkContext(SPARK_MASTER_ADDRESS,
                 "Spark App 0", SPARK_HOME, jars, envs);
 
         */
-/************************ ÒÔÉÏ´úÂëÆ¬¶Î¿É±»ËùÓÐApp¹²ÓÃ ****************************//*
+/************************ ä»¥ä¸Šä»£ç ç‰‡æ®µå¯è¢«æ‰€æœ‰Appå…±ç”¨ ****************************//*
 
 
-        // SparkÉÏµÄ´ÊÆµÍ³¼Æ
+        // Sparkä¸Šçš„è¯é¢‘ç»Ÿè®¡
         countWords(context);
 
     }
