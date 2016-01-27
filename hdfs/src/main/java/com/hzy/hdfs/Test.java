@@ -26,34 +26,65 @@ import java.util.StringTokenizer;
 public class Test {
     public static String hdfsUrl = "hdfs://192.168.189.142:8020";
     public static String pathfile = "/tmp/hdfs/test.txt";
-    public static String pathfilein = "/java/test/in/testin.txt";
-    public static String pathfileout = "/java/test/out/testout.txt";
+    public static String pathfilein = "H:\\java\\test\\in\\testin.txt";
+    public static String pathfileout = "H:\\java\\test\\out\\testout.txt";
     public static String path = "/tmp/hdfs";
 
     public static void main(String[] args) throws IOException,Exception{
-        Configuration conf = new Configuration();
+        //Configuration conf = new Configuration();
         //FileSystem fs = FileSystem.get(URI.create(hdfsUrl), conf);
         //Path file = new Path(pathfile);
-        Path filein = new Path(pathfilein);
-        Path fileout = new Path(pathfileout);
+        //Path filein = new Path(pathfilein);
+        //Path fileout = new Path(pathfileout);
         //HdfsUtil.readFile(fs, file);
         //HdfsUtil.createWriteFile(fs,file,"test");
         //fs.close();
 
+        Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(Test.class);
-        //设置Map、Combine和Reduce处理类
         job.setMapperClass(Map.class);
         job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
-        //设置输出类型
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
-        //设置输入和输出目录
-        FileInputFormat.addInputPath(job, filein);
-        FileOutputFormat.setOutputPath(job, fileout);
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
+
+    public static class TokenizerMapper
+            extends Mapper<Object, Text, Text, IntWritable>{
+
+        private final static IntWritable one = new IntWritable(1);
+        private Text word = new Text();
+
+        public void map(Object key, Text value, Context context
+        ) throws IOException, InterruptedException {
+            StringTokenizer itr = new StringTokenizer(value.toString());
+            while (itr.hasMoreTokens()) {
+                word.set(itr.nextToken());
+                context.write(word, one);
+            }
+        }
+    }
+
+    public static class IntSumReducer
+            extends Reducer<Text,IntWritable,Text,IntWritable> {
+        private IntWritable result = new IntWritable();
+
+        public void reduce(Text key, Iterable<IntWritable> values,
+                           Context context
+        ) throws IOException, InterruptedException {
+            int sum = 0;
+            for (IntWritable val : values) {
+                sum += val.get();
+            }
+            result.set(sum);
+            context.write(key, result);
+        }
+    }
+
 
     public static class Map extends Mapper<Object,Text,Text,Text> {
         private static Text line=new Text();//每行数据
