@@ -18,6 +18,8 @@ import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.*;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -41,15 +43,18 @@ public class Test {
         //fs.close();
 
         Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, "word count");
+        Job job = Job.getInstance(conf, "max price");
         job.setJarByClass(Test.class);
         job.setMapperClass(Map.class);
-        job.setCombinerClass(Reduce.class);
+        //job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
+
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 
@@ -85,21 +90,43 @@ public class Test {
         }
     }
 
-
-    public static class Map extends Mapper<Object,Text,Text,Text> {
+    //负责根据名称作为Key，吧价格集中
+    public static class Map extends Mapper<Object,Text,Text,IntWritable> {
         private static Text line=new Text();//每行数据
 
         public void map(Object key,Text value,Context context) throws IOException,InterruptedException {
             line = value;
-            context.write(line, new Text(""));
+            //获取名称
+            String name = line.toString().split(" ")[0];
+            //获取价格
+            Integer price = Integer.parseInt(line.toString().split(" ")[1]);
+            //System.out.println(price);
+            //context.write(line, new Text(""));
+            context.write(new Text(name),new IntWritable(price));
+
         }
     }
 
-    //reduce将输入中的key复制到输出数据的key上，并直接输出
-    public static class Reduce extends Reducer<Text,Text,Text,Text> {
+    //求最大价格
+    public static class Reduce extends Reducer<Text,IntWritable,Text,List<FloatWritable>> {
         //实现reduce函数
-        public void reduce(Text key,Iterable<Text> values,Context context)throws IOException,InterruptedException{
-            context.write(key, new Text(""));
+        public void reduce(Text key,Iterable<IntWritable> values,Context context)throws IOException,InterruptedException{
+            float maxPrice = Integer.MIN_VALUE;
+            float mixPrice = Integer.MAX_VALUE;
+            float avgPrice = 0;
+            int total = 1;
+            List<FloatWritable> listPrice = new ArrayList<>();
+            for(IntWritable value:values){
+                maxPrice = Math.max(maxPrice, value.get());
+                mixPrice = Math.min(mixPrice, value.get());
+                avgPrice = avgPrice + value.get();
+                total++;
+            }
+            avgPrice = avgPrice / total;
+            listPrice.add(new FloatWritable(maxPrice));
+            listPrice.add(new FloatWritable(mixPrice));
+            listPrice.add(new FloatWritable(avgPrice));
+            context.write(key, listPrice);
         }
 
     }
