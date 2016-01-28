@@ -1,21 +1,21 @@
 package com.hzy.hdfs;
 
+import com.hzy.entity.ChineseMedicine;
+import com.hzy.entity.MyText;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
+import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import sun.rmi.log.LogInputStream;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Created by Hzy on 2016/1/21.
@@ -43,20 +43,22 @@ public class Test {
         第一个job
          */
 
-            Job job = Job.getInstance(conf, "max price");
+            Job job = Job.getInstance(conf, "price");
             job.setJarByClass(Test.class);
 
-            job.setMapperClass(Map1.class);
+            job.setMapperClass(Map.class);
             //job.setCombinerClass(Reduce.class);
-            job.setReducerClass(Reduce1.class);
+            job.setReducerClass(Reduce.class);
 
             job.setMapOutputKeyClass(Text.class);
-            job.setMapOutputValueClass(FloatWritable.class);
+            job.setMapOutputValueClass(IntWritable.class);
+
+            //job.setSortComparatorClass();
 
             //map阶段的输出的key
-            job.setOutputKeyClass(Text.class);
+            //job.setOutputKeyClass(Text.class);
             //map阶段的输出的value
-            job.setOutputValueClass(FloatWritable.class);
+            //job.setOutputValueClass(Text.class);
 
             //加入控制容器
             ControlledJob ctrljob1 = new ControlledJob(conf);
@@ -64,60 +66,58 @@ public class Test {
             FileInputFormat.addInputPath(job, new Path(args[0]));
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-            System.exit(job.waitForCompletion(true) ? 0 : 1);
-
-/*
-
-        Job job2 = Job.getInstance(conf, "order total");
-        job2.setJarByClass(Test.class);
-
-        job2.setMapperClass(OrderMap.class);
-        job2.setReducerClass(Order.class);
-
-        //reduce阶段的输出的key
-        job2.setOutputKeyClass(Text.class);
-        //reduce阶段的输出的value
-        job2.setOutputValueClass(IntWritable.class);
+            //System.exit(job.waitForCompletion(true) ? 0 : 1);
 
 
-        //作业2加入控制容器
-        //ControlledJob ctrljob2 = new ControlledJob(conf);
-        //ctrljob2.setJob(job2);
+            Job job2 = Job.getInstance(conf, "order total");
+            job2.setJarByClass(Test.class);
 
-        //设置多个作业直接的依赖关系
-        //如下所写：
-        //意思为job2的启动，依赖于job1作业的完成
-        //ctrljob2.addDependingJob(ctrljob1);
+            job2.setMapperClass(Map1.class);
+            job2.setReducerClass(Reduce1.class);
+
+            //map阶段的输出的key
+            job2.setOutputKeyClass(Text.class);
+            //map阶段的输出的value
+            job2.setOutputValueClass(Text.class);
 
 
-        //输入路径是上一个作业的输出路径，因此这里填args[1],要和上面对应好
-        FileInputFormat.addInputPath(job2, new Path(args[1]));
+            //作业2加入控制容器
+            ControlledJob ctrljob2 = new ControlledJob(conf);
+            ctrljob2.setJob(job2);
 
-        //输出路径从新传入一个参数，这里需要注意，因为我们最后的输出文件一定要是没有出现过得
-        //因此我们在这里new Path(args[2])因为args[2]在上面没有用过，只要和上面不同就可以了
-        FileOutputFormat.setOutputPath(job2, new Path(args[1] + "1"));
+            //设置多个作业直接的依赖关系
+            //如下所写：
+            //意思为job2的启动，依赖于job1作业的完成
+            ctrljob2.addDependingJob(ctrljob1);
 
-*/
+
+            //输入路径是上一个作业的输出路径，因此这里填args[1],要和上面对应好
+            FileInputFormat.addInputPath(job2, new Path(args[1]));
+
+            //输出路径从新传入一个参数，这里需要注意，因为我们最后的输出文件一定要是没有出现过得
+            //因此我们在这里new Path(args[2])因为args[2]在上面没有用过，只要和上面不同就可以了
+            FileOutputFormat.setOutputPath(job2, new Path(args[1] + "1"));
+
 
             //主的控制容器，控制上面的总的两个子作业
-            //JobControl jobCtrl = new JobControl("myctrl");
+            JobControl jobCtrl = new JobControl("myctrl");
 
             //添加到总的JobControl里，进行控制
-            //jobCtrl.addJob(ctrljob1);
-            //jobCtrl.addJob(ctrljob2);
+            jobCtrl.addJob(ctrljob1);
+            jobCtrl.addJob(ctrljob2);
 
             //在线程启动，记住一定要有这个
-       /* Thread t = new Thread(jobCtrl);
-        t.start();
+            Thread t = new Thread(jobCtrl);
+            t.start();
 
-        while (true) {
+            while (true) {
 
-            if (jobCtrl.allFinished()) {//如果作业成功完成，就打印成功作业的信息
-                System.out.println(jobCtrl.getSuccessfulJobList());
-                jobCtrl.stop();
-                break;
+                if (jobCtrl.allFinished()) {//如果作业成功完成，就打印成功作业的信息
+                    System.out.println(jobCtrl.getSuccessfulJobList());
+                    jobCtrl.stop();
+                    break;
+                }
             }
-        }*/
             //System.exit(job2.waitForCompletion(true) ? 0 : 1);
 
         } catch (Exception e) {
@@ -128,6 +128,214 @@ public class Test {
 
 
     }
+
+
+    //负责根据名称作为Key，吧价格集中
+    public static class Map extends Mapper<Object, Text, Text, IntWritable> {
+        private static Text line = new Text();//每行数据
+
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+            line = value;
+            //获取名称
+            String name = line.toString().split(" ")[0];
+            //获取价格
+            Integer price = Integer.parseInt(line.toString().split(" ")[1]);
+//            System.out.println("line:" + line);
+//            System.out.println("name:" + name + "price:" + price);
+            //context.write(line, new Text(""));
+            context.write(new Text(name), new IntWritable(price));
+        }
+    }
+
+
+    //求最大价格
+    public static class Reduce extends Reducer<Text, IntWritable, Text, Text> {
+        //实现reduce函数
+        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            float maxPrice = Integer.MIN_VALUE;
+            float mixPrice = Integer.MAX_VALUE;
+            float avgPrice = 0;
+            int total = 0;
+            List<ChineseMedicine> chineseMedicineList = new ArrayList<>();
+            ArrayList<ChineseMedicine> list = new ArrayList<ChineseMedicine>();
+            for (IntWritable value : values) {
+                maxPrice = Math.max(maxPrice, value.get());
+                mixPrice = Math.min(mixPrice, value.get());
+                avgPrice += value.get();
+                total++;
+            }
+            avgPrice = avgPrice / total;
+
+            ChineseMedicine chineseMedicine = new ChineseMedicine();
+            chineseMedicine.setName(key.toString());
+            chineseMedicine.setMaxPrice(maxPrice);
+            chineseMedicine.setMinPrice(mixPrice);
+            chineseMedicine.setAvgPrice(avgPrice);
+            chineseMedicine.setTotal(total);
+            list.add(chineseMedicine);
+
+            //System.out.println("list.size()="+list.size());
+
+
+
+            //组装结果
+/*
+            ArrayList<ChineseMedicine> result = new ArrayList<ChineseMedicine>();
+            for (ChineseMedicine r1 : list) {
+                System.out.println("r1.getName()"+r1.getName()+"r1.getTotal()"+r1.getTotal());
+            }
+*/
+
+            for (ChineseMedicine r : list) {
+                key.set(r.getName());
+                String value = r.getMinPrice() + "\t"
+                        + r.getMaxPrice() + "\t"
+                        + r.getAvgPrice() + "\t"
+                        + r.getTotal() + "\t";
+                context.write(key, new Text(value));
+            }
+
+/*
+            chineseMedicine.setName(key.toString());
+            chineseMedicine.setMaxPrice(maxPrice);
+            chineseMedicine.setMinPrice(mixPrice);
+            chineseMedicine.setAvgPrice(avgPrice);
+            chineseMedicine.setTotal(total);
+            chineseMedicineList.add(chineseMedicine);
+            context.write(key, chineseMedicine);*/
+        }
+    }
+
+    //负责根据名称作为Key，吧价格集中
+    public static class Map1 extends Mapper<Object, Text, Text, Text> {
+        private static Text name = new Text();//每行数据
+        private static Text row = new Text();//每行数据
+
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+            //line = key;
+            //line2 = value;
+            //System.out.println("line:" + line);
+            //System.out.println("key.getLength():" + key.getLength());
+            //System.out.println("value.getLength():" + value.getLength());
+
+            //System.out.println("key:" + key);
+            //获取名称
+            String[] splits = value.toString().split("\t");
+            //System.out.println("splits.length=" + splits.length);
+            name.set(splits[4]+ "\t" + splits[0] );
+            context.write(name, value);
+
+          /*  System.out.println("splits[0]=" + splits[0]);
+            System.out.println("splits[1]=" + splits[1]);
+            String[] prices = splits[1].replace("[","").replace("]","").split(",");
+            List<FloatWritable> list = new ArrayList<>();
+            for(String s:prices){
+                list.add(new FloatWritable(Float.parseFloat(s)));
+                //context.write(new Text(splits[0]), new FloatWritable(Float.parseFloat(s)));
+            }
+
+            context.write(new Text(splits[0]), list);*/
+
+
+        }
+    }
+
+
+
+    public static class Reduce1 extends Reducer<Text, Text, Text, Text> {
+        //实现reduce函数
+        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+            //System.out.println("values=" + values);
+            System.out.println("key=" + key);
+            List<ChineseMedicine> list = new ArrayList<>();
+
+            for (Text row : values) {
+
+                //System.out.println("row.toString()"+row.toString());
+                String[] items = row.toString().split("\t");
+                ChineseMedicine chineseMedicine = new ChineseMedicine();
+                chineseMedicine.setName(items[0]);
+                chineseMedicine.setMinPrice(Float.parseFloat(items[1]));
+                chineseMedicine.setMaxPrice(Float.parseFloat(items[2]));
+                chineseMedicine.setAvgPrice(Float.parseFloat(items[3]));
+                chineseMedicine.setTotal(Integer.parseInt(items[4]));
+                list.add(chineseMedicine);
+            }
+
+            //排序
+            Collections.sort(list, new Comparator<ChineseMedicine>() {
+                public int compare(ChineseMedicine r1, ChineseMedicine r2) {
+                    System.out.println("r1.getName()" + r1.getName() + "r1.getTotal()" + r1.getTotal());
+                    System.out.println("r2.getName()" + r2.getName() + "r2.getTotal()" + r2.getTotal());
+                    return (r1.getTotal().compareTo(r2.getTotal()));
+                }
+            });
+
+            for (ChineseMedicine r : list) {
+                key.set(r.getName());
+                String value = r.getMinPrice() + "\t"
+                        + r.getMaxPrice() + "\t"
+                        + r.getAvgPrice() + "\t"
+                        + r.getTotal() + "\t";
+                context.write(key, new Text(value));
+            }
+
+     /*       System.out.println("reduce");
+            float avgPrice = 0;
+            List<FloatWritable> listPrice = new ArrayList<>();
+            listPrice.add(new FloatWritable(avgPrice));*/
+            //context.write(key, listPrice);
+        }
+    }
+
+    public static class GroupingComparator extends WritableComparator {
+        protected GroupingComparator() {
+            super(MyText.class, true);
+        }
+        @Override
+        //Compare two WritableComparables.
+        public int compare(WritableComparable w1, WritableComparable w2) {
+            System.out.println("进排序拉");
+            MyText ip1 = (MyText) w1;
+            MyText ip2 = (MyText) w2;
+            int l = ip1.getValue();
+            int r = ip2.getValue();
+            return l == r ? 0 : (l < r ? -1 : 1);
+        }
+    }
+
+
+
+
+
+    //第二次map
+
+    public static class OrderMap extends Mapper<Object, Text,Text,Text> {
+        private static Text line = new Text();//每行数据
+        public void map(Object key, Text value,Context context) throws IOException, InterruptedException {
+            line = value;
+            System.out.println("第二次map的key" + key);
+            System.out.println("第二次map的Text" + value);
+            context.write(new Text(key.toString()), value);
+        }
+    }
+
+
+    //按照单个名字出现次数排序
+    public static class Order extends Reducer<Text,Text, Text, List<Text> > {
+        //实现reduce函数
+        public void reduce(Text key, Iterable<Text> values,Context context)throws IOException,InterruptedException{
+            /*Collections.sort(values);*/
+            System.out.println(key);
+            List<Text> listPrice = new ArrayList<>();
+            for (Text value : values) {
+                System.out.println("第二job reduce value"+value);
+                listPrice.add(value);
+            }
+            context.write(new Text("a"), listPrice);
+        }
+    }
+
 
     public static class TokenizerMapper
             extends Mapper<Object, Text, Text, IntWritable> {
@@ -158,127 +366,6 @@ public class Test {
             }
             result.set(sum);
             context.write(key, result);
-        }
-    }
-
-    //负责根据名称作为Key，吧价格集中
-    public static class Map extends Mapper<Object, Text, Text, IntWritable> {
-        private static Text line = new Text();//每行数据
-
-        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            line = value;
-            //获取名称
-            String name = line.toString().split(" ")[0];
-            //获取价格
-            Integer price = Integer.parseInt(line.toString().split(" ")[1]);
-            System.out.println("line:" + line);
-            System.out.println("name:" + name + "price:" + price);
-            //context.write(line, new Text(""));
-            context.write(new Text(name), new IntWritable(price));
-        }
-    }
-
-
-    //负责根据名称作为Key，吧价格集中
-    public static class Map1 extends Mapper<Object, Text, Text, FloatWritable> {
-        private static Text line = new Text();//每行数据
-        private static Text line2 = new Text();//每行数据
-
-        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            //line = key;
-            //line2 = value;
-            //System.out.println("line:" + line);
-            //System.out.println("key.getLength():" + key.getLength());
-            //System.out.println("value.getLength():" + value.getLength());
-
-            System.out.println("key:" + key);
-            //获取名称
-            String[] splits = value.toString().split("\t");
-            System.out.println("splits.length=" + splits.length);
-          /*  System.out.println("splits[0]=" + splits[0]);
-            System.out.println("splits[1]=" + splits[1]);*/
-            String[] prices = splits[1].replace("[","").replace("]","").split(",");
-            List<FloatWritable> list = new ArrayList<>();
-            for(String s:prices){
-//                list.add(new FloatWritable(Float.parseFloat(s)));
-                context.write(new Text(splits[0]), new FloatWritable(Float.parseFloat(s)));
-            }
-
-            //context.write(new Text(splits[0]), list);
-
-
-        }
-    }
-
-    //求最大价格
-    public static class Reduce extends Reducer<Text, IntWritable, Text, List<FloatWritable>> {
-        //实现reduce函数
-        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            float maxPrice = Integer.MIN_VALUE;
-            float mixPrice = Integer.MAX_VALUE;
-            float avgPrice = 0;
-            int total = 0;
-            List<FloatWritable> listPrice = new ArrayList<>();
-            for (IntWritable value : values) {
-                maxPrice = Math.max(maxPrice, value.get());
-                mixPrice = Math.min(mixPrice, value.get());
-                avgPrice += value.get();
-                total++;
-            }
-
-            avgPrice = avgPrice / total;
-            listPrice.add(new FloatWritable(maxPrice));
-            listPrice.add(new FloatWritable(mixPrice));
-            listPrice.add(new FloatWritable(avgPrice));
-            listPrice.add(new FloatWritable(total));
-            context.write(key, listPrice);
-        }
-    }
-
-    public static class Reduce1 extends Reducer<Text, FloatWritable, Text, List<FloatWritable>> {
-        //实现reduce函数
-        public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
-            System.out.println("key=" + key);
-            for (FloatWritable price : values) {
-                System.out.println("price:"+price);
-            }
-
-
-            System.out.println("reduce");
-            float avgPrice = 0;
-            List<FloatWritable> listPrice = new ArrayList<>();
-            listPrice.add(new FloatWritable(avgPrice));
-            context.write(key, listPrice);
-        }
-    }
-
-
-
-    //第二次map
-
-    public static class OrderMap extends Mapper<Object, Text,Text,Text> {
-        private static Text line = new Text();//每行数据
-        public void map(Object key, Text value,Context context) throws IOException, InterruptedException {
-            line = value;
-            System.out.println("第二次map的key" + key);
-            System.out.println("第二次map的Text" + value);
-            context.write(new Text(key.toString()), value);
-        }
-    }
-
-
-    //按照单个名字出现次数排序
-    public static class Order extends Reducer<Text,Text, Text, List<Text> > {
-        //实现reduce函数
-        public void reduce(Text key, Iterable<Text> values,Context context)throws IOException,InterruptedException{
-            /*Collections.sort(values);*/
-            System.out.println(key);
-            List<Text> listPrice = new ArrayList<>();
-            for (Text value : values) {
-                System.out.println("第二job reduce value"+value);
-                listPrice.add(value);
-            }
-            context.write(new Text("a"), listPrice);
         }
     }
 }
