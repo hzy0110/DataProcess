@@ -41,37 +41,6 @@
                 </executions>
             </plugin>
 
-
-
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-assembly-plugin</artifactId>-->
-            <!--<version>2.4.1</version>-->
-            <!--<configuration>-->
-            <!--&lt;!&ndash; get all project dependencies &ndash;&gt;-->
-            <!--<descriptorRefs>-->
-            <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-            <!--</descriptorRefs>-->
-            <!--&lt;!&ndash; MainClass in mainfest make a executable jar &ndash;&gt;-->
-            <!--<archive>-->
-            <!--<manifest>-->
-            <!--<mainClass>com.hzy.DistributeWordTopology</mainClass>-->
-            <!--</manifest>-->
-            <!--</archive>-->
-
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>make-assembly</id>-->
-            <!--&lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-            <!--<goal>single</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -101,7 +70,7 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.hzy.DistributeWordTopology</mainClass>
+                                    <mainClass>com.hzy.hdfs.Test</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
