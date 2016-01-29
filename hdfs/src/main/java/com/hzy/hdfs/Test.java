@@ -1,6 +1,7 @@
 package com.hzy.hdfs;
 
 import com.hzy.entity.ChineseMedicine;
+import com.hzy.entity.EmploeeWritable;
 import com.hzy.entity.MyText;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -80,6 +81,7 @@ public class Test {
             //map阶段的输出的value
             job2.setOutputValueClass(Text.class);
 
+            job2.setSortComparatorClass(NameComparator.class);
 
             //作业2加入控制容器
             ControlledJob ctrljob2 = new ControlledJob(conf);
@@ -241,12 +243,11 @@ public class Test {
     }
 
 
-
     public static class Reduce1 extends Reducer<Text, Text, Text, Text> {
         //实现reduce函数
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             //System.out.println("values=" + values);
-            System.out.println("key=" + key);
+            //System.out.println("key=" + key);
             List<ChineseMedicine> list = new ArrayList<>();
 
             for (Text row : values) {
@@ -263,13 +264,13 @@ public class Test {
             }
 
             //排序
-            Collections.sort(list, new Comparator<ChineseMedicine>() {
+/*            Collections.sort(list, new Comparator<ChineseMedicine>() {
                 public int compare(ChineseMedicine r1, ChineseMedicine r2) {
                     System.out.println("r1.getName()" + r1.getName() + "r1.getTotal()" + r1.getTotal());
                     System.out.println("r2.getName()" + r2.getName() + "r2.getTotal()" + r2.getTotal());
                     return (r1.getTotal().compareTo(r2.getTotal()));
                 }
-            });
+            });*/
 
             for (ChineseMedicine r : list) {
                 key.set(r.getName());
@@ -288,54 +289,97 @@ public class Test {
         }
     }
 
-    public static class GroupingComparator extends WritableComparator {
-        protected GroupingComparator() {
-            super(MyText.class, true);
+
+    public static class Comparator extends WritableComparator{
+        private static final Text.Comparator TEXT_COMPARATOR= new Text.Comparator();
+
+        protected Comparator() {
+            super(EmploeeWritable.class);
+        }
+
+        @Override
+        public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
+            try {
+                /**
+                 * name是Text类型，Text是标准的UTF-8字节流，
+                 * 由一个变长整形开头表示Text中文本所需要的长度，接下来就是文本本身的字节数组
+                 * decodeVIntSize返回变长整形的长度，readVInt表示文本字节数组的长度，加起来就是第一个成员name的长度
+                 */
+                int nameL1 = WritableUtils.decodeVIntSize(b1[s1]) + readVInt(b1, s1);
+                int nameL2 = WritableUtils.decodeVIntSize(b2[s2]) + readVInt(b2, s2);
+                //System.out.println("nameL1=" + nameL1 + "nameL2=" + nameL2);
+                //和compareTo方法一样，先比较name
+                int cmp = TEXT_COMPARATOR.compare(b1, s1, nameL1, b2, s2, nameL2);
+                //System.out.println("cmp=" + cmp);
+                if (cmp != 0) {
+                    return cmp;
+                }
+                //再比较role
+                return TEXT_COMPARATOR.compare(b1, s1 + nameL1, l1 - nameL1, b2, s2 + nameL2, l2 - nameL2);
+            } catch (IOException e) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        static {
+            //注册raw comprator,更象是绑定，这样MapReduce使用EmploeeWritable时就会直接调用Comparator
+            WritableComparator.define(EmploeeWritable.class,new Comparator());
+        }
+    }
+
+    public static class NameComparator extends WritableComparator {
+        private static final Text.Comparator TEXT_COMPARATOR = new Text.Comparator();
+
+        protected NameComparator() {
+            super(EmploeeWritable.class);
+        }
+
+        @Override
+        public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
+            System.out.println("进的第一个");
+            try {
+                int nameL1 = WritableUtils.decodeVIntSize(b1[s1]) + readVInt(b1, s1);
+                int nameL2 = WritableUtils.decodeVIntSize(b2[s2]) + readVInt(b2, s2);
+                return -TEXT_COMPARATOR.compare(b1, s1, nameL1, b2, s2, nameL2);
+            } catch (IOException e) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        @Override
+        public int compare(WritableComparable a, WritableComparable b) {
+            if (a instanceof EmploeeWritable && b instanceof EmploeeWritable) {
+                System.out.println("a).getName()=" + ((EmploeeWritable) a).getName() + "b).getName()=" + ((EmploeeWritable) b).getName());
+                System.out.println("a).getRole()=" + ((EmploeeWritable) a).getRole() + "b).getRole()=" + ((EmploeeWritable) b).getRole());
+                return -((EmploeeWritable) a).getName().compareTo(((EmploeeWritable) b).getName());
+            }
+            return super.compare(a, b);
+        }
+    }
+
+    /***
+     * 按词频降序排序
+     * 的类
+     *
+     * **/
+    public static class DescSort extends  WritableComparator{
+
+        public DescSort() {
+            super(IntWritable.class,true);//注册排序组件
         }
         @Override
-        //Compare two WritableComparables.
-        public int compare(WritableComparable w1, WritableComparable w2) {
-            System.out.println("进排序拉");
-            MyText ip1 = (MyText) w1;
-            MyText ip2 = (MyText) w2;
-            int l = ip1.getValue();
-            int r = ip2.getValue();
-            return l == r ? 0 : (l < r ? -1 : 1);
+        public int compare(byte[] arg0, int arg1, int arg2, byte[] arg3,
+                           int arg4, int arg5) {
+            return -super.compare(arg0, arg1, arg2, arg3, arg4, arg5);//注意使用负号来完成降序
         }
-    }
 
+        @Override
+        public int compare(Object a, Object b) {
 
-
-
-
-    //第二次map
-
-    public static class OrderMap extends Mapper<Object, Text,Text,Text> {
-        private static Text line = new Text();//每行数据
-        public void map(Object key, Text value,Context context) throws IOException, InterruptedException {
-            line = value;
-            System.out.println("第二次map的key" + key);
-            System.out.println("第二次map的Text" + value);
-            context.write(new Text(key.toString()), value);
+            return   -super.compare(a, b);//注意使用负号来完成降序
         }
+
     }
-
-
-    //按照单个名字出现次数排序
-    public static class Order extends Reducer<Text,Text, Text, List<Text> > {
-        //实现reduce函数
-        public void reduce(Text key, Iterable<Text> values,Context context)throws IOException,InterruptedException{
-            /*Collections.sort(values);*/
-            System.out.println(key);
-            List<Text> listPrice = new ArrayList<>();
-            for (Text value : values) {
-                System.out.println("第二job reduce value"+value);
-                listPrice.add(value);
-            }
-            context.write(new Text("a"), listPrice);
-        }
-    }
-
 
     public static class TokenizerMapper
             extends Mapper<Object, Text, Text, IntWritable> {
