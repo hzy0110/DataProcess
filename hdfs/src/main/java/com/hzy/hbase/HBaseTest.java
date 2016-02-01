@@ -33,7 +33,8 @@ public class HBaseTest {
     public static void put(String tableName, String row, String columnFamily, String column, String data) throws IOException {
         HTable table = new HTable(cfg, tableName);
         Put put = new Put(Bytes.toBytes(row));
-        put.add(Bytes.toBytes(columnFamily), Bytes.toBytes(column), Bytes.toBytes(data));
+        put.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(column), Bytes.toBytes(data));
+
         table.put(put);
         System.out.println("put success");
     }
@@ -78,9 +79,16 @@ public class HBaseTest {
         String columnFamily = "c1";
 
         try {
-            HBaseTest.create(tableName, columnFamily);
-            HBaseTest.put(tableName, "row1", columnFamily, "column1", "data1");
+            //HBaseTest.create(tableName, columnFamily);
+            System.out.println("-----------put----------");
+            HBaseTest.put(tableName, "row1", columnFamily, "column2", "data1");
+            HBaseTest.put(tableName, "row1", columnFamily, "column3", "data1");
+            HBaseTest.put(tableName, "row2", columnFamily, "column2", "data1");
+            HBaseTest.put(tableName, "row2", columnFamily, "column3", "data1");
+            System.out.println("-----------get----------");
             HBaseTest.get(tableName, "row1");
+            HBaseTest.get(tableName, "row2");
+            System.out.println("-----------scan----------");
             HBaseTest.scan(tableName);
             /*if (HBaseTest.delete(tableName) == true) {
                 System.out.println("delete table " + tableName + "success");
