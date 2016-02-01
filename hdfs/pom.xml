@@ -90,7 +90,6 @@
         </dependency>
 
         <!--hbase-->
-
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
@@ -98,13 +97,18 @@
         </dependency>
 
         <!--hive-->
+<!--
         <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-exec</artifactId>
             <version>1.2.1</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+            <version>1.2.1</version>
         </dependency>
-
-
 
     </dependencies>
 
