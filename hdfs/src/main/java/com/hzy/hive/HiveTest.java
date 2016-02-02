@@ -46,6 +46,19 @@ public class HiveTest {
         }
 
 
+        // load data into table
+        // NOTE: filepath has to be local to the hive server
+        // NOTE: /tmp/a.txt is a ctrl-A separated file with two fields per line
+        String filepath = "/tmp/out7/part-r-00000";
+
+        //有local表示是本地文件
+        //无local表示是hdfs文件
+        sql = "load data local inpath '" + filepath + "' into table " + tableName;
+        System.out.println("Running: " + sql);
+        stmt.execute(sql);
+
+
+        // select * query
         sql = "select * from " + tableName;
         res = stmt.executeQuery(sql);
         while (res.next()) {
@@ -53,6 +66,7 @@ public class HiveTest {
                     + res.getString(2));
         }
 
+        // regular hive query
         sql = "select count(1) from " + tableName;
         System.out.println("Running: " + sql);
         res = stmt.executeQuery(sql);
