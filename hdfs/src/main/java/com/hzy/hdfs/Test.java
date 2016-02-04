@@ -51,6 +51,11 @@ public class Test {
             //job.setCombinerClass(Reduce.class);
             job.setReducerClass(Reduce.class);
 
+            //如果K2和K3，或者V2和V3类型相同，则无需调用setMapOutputKeyClass，setMapOutputValueClass
+            //K2指的是中间类型输出键，或者map输出键，K3是指中间类型输出值，或者map输出值
+            //V同理
+
+
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(IntWritable.class);
 
