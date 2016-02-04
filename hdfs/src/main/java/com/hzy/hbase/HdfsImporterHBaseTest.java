@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -27,8 +28,8 @@ public class HdfsImporterHBaseTest  extends Configured implements Tool {
             String k = key.toString();
 
             Put p = new Put(k.getBytes());
-            p.add(HBaseTemperatureQuery.DATA_COLUMNFAMILY,
-                    HBaseTemperatureQuery.AIRTEMP_QUALIFIER,
+            p.add("test1".getBytes(),
+                    "test2".getBytes(),
                     Bytes.toBytes(10));
             context.write(null, p);
         }
