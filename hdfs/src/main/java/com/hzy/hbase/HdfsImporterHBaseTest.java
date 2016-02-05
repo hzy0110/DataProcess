@@ -129,15 +129,15 @@ public class HdfsImporterHBaseTest {
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
 
-        TableMapReduceUtil.initTableReducerJob("mytable", Hdfs2HBaseReducer.class, job);
+        //TableMapReduceUtil.initTableReducerJob("mytable", Hdfs2HBaseReducer.class, job);
 
-        //job.setOutputFormatClass(TableOutputFormat.class);
+        job.setOutputFormatClass(TableOutputFormat.class);
 /*
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-        job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, otherArgs[1]);
+
 */
 
-
+        job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, otherArgs[1]);
 
         System.exit(job.waitForCompletion(true)?0:1);
     }
