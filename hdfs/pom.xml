@@ -70,7 +70,7 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.hzy.hbase.HdfsImporterHBaseTest</mainClass>
+                                    <mainClass>com.hzy.hbase.CM2HBase</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

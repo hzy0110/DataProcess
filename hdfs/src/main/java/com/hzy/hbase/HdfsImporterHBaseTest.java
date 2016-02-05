@@ -28,7 +28,7 @@ import java.io.IOException;
  */
 public class HdfsImporterHBaseTest {
 
-    
+
 
 
     /*static class HBaseTemperatureMapper<K> extends Mapper<LongWritable, Text, K, Put> {
