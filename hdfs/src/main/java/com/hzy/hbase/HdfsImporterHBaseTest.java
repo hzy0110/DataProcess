@@ -28,6 +28,9 @@ import java.io.IOException;
  */
 public class HdfsImporterHBaseTest {
 
+    
+
+
     /*static class HBaseTemperatureMapper<K> extends Mapper<LongWritable, Text, K, Put> {
         @Override
         public void map(LongWritable key, Text value, Context context) throws
@@ -118,7 +121,7 @@ public class HdfsImporterHBaseTest {
         job.setJarByClass(HdfsImporterHBaseTest.class);
 
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-        FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+        //FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 
         job.setMapperClass(Hdfs2HBaseMapper.class);
         job.setReducerClass(Hdfs2HBaseReducer.class);
@@ -129,9 +132,9 @@ public class HdfsImporterHBaseTest {
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
 
-        //TableMapReduceUtil.initTableReducerJob("mytable", Hdfs2HBaseReducer.class, job);
+        TableMapReduceUtil.initTableReducerJob("observations", Hdfs2HBaseReducer.class, job);
 
-        job.setOutputFormatClass(TableOutputFormat.class);
+
 
 /*      查看了HBASE的源代码中TableOutputFormat和TableMapReduceUtil两个类，
         最终发现TableMapReduceUtil在调用initTableReducerJob初始化时，
@@ -145,8 +148,8 @@ public class HdfsImporterHBaseTest {
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 
 */
-
-        job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, otherArgs[1]);
+        //job.setOutputFormatClass(TableOutputFormat.class);
+        //job.getConfiguration().set(TableOutputFormat.OUTPUT_TABLE, otherArgs[1]);
 
         System.exit(job.waitForCompletion(true)?0:1);
     }
