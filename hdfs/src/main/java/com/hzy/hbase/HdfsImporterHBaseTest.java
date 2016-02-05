@@ -132,6 +132,15 @@ public class HdfsImporterHBaseTest {
         //TableMapReduceUtil.initTableReducerJob("mytable", Hdfs2HBaseReducer.class, job);
 
         job.setOutputFormatClass(TableOutputFormat.class);
+
+/*      查看了HBASE的源代码中TableOutputFormat和TableMapReduceUtil两个类，
+        最终发现TableMapReduceUtil在调用initTableReducerJob初始化时，
+        就会调用TableOutputFormat作为输出。唯一不同的是，在初始化的最后，initTableReducerJob函数中会调用initCredentials，
+        而这个函数会调用addTokenForJob
+        （Checks for an authentication token for the given user, obtaining a new token if necessary,
+        and adds it to the credentials for the given map reduce job）。
+        */
+
 /*
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 
