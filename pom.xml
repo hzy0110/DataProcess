@@ -13,6 +13,7 @@
         <module>storm</module>
         <module>spark</module>
         <module>hdfs</module>
+        <module>sparkscalamaven</module>
     </modules>
 
 
