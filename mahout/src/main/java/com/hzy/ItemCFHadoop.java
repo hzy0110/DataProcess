@@ -5,10 +5,10 @@ import org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
 
 public class ItemCFHadoop {
 
-    private static final String HDFS = "hdfs://192.168.1.210:9000";
+    private static final String HDFS = "hdfs://192.168.1.210:8020";
 
     public static void main(String[] args) throws Exception {
-        String localFile = "datafile/item.csv";
+        String localFile = "/home/hzy/tmp/mahout/item.csv";
         String inPath = HDFS + "/user/hdfs/userCF";
         String inFile = inPath + "/item.csv";
         String outPath = HDFS + "/user/hdfs/userCF/result/";
