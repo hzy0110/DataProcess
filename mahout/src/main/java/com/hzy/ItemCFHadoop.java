@@ -5,7 +5,7 @@ import org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
 
 public class ItemCFHadoop {
 
-    private static final String HDFS = "hdfs://192.168.1.210:8020";
+    private static final String HDFS = "hdfs://192.168.70.128:8020";
 
     public static void main(String[] args) throws Exception {
         String localFile = "/home/hzy/tmp/mahout/item.csv";
@@ -17,11 +17,11 @@ public class ItemCFHadoop {
 
         JobConf conf = config();
         HdfsDAO hdfs = new HdfsDAO(HDFS, conf);
-        hdfs.rmr(inPath);
-        hdfs.mkdirs(inPath);
-        hdfs.copyFile(localFile, inPath);
-        hdfs.ls(inPath);
-        hdfs.cat(inFile);
+        //hdfs.rmr(inPath);
+        //hdfs.mkdirs(inPath);
+        //hdfs.copyFile(localFile, inPath);
+        //hdfs.ls(inPath);
+        //hdfs.cat(inFile);
 
         StringBuilder sb = new StringBuilder();
         sb.append("--input ").append(inPath);

@@ -14,22 +14,95 @@
         <!--hadoop-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-            <version>1.2.1</version>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>2.7.1</version>
         </dependency>
 
-        <!--mahout-->
+    <!--    <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>1.2.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+
+
+        <!--<dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-examples</artifactId>
+            <version>0.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mahout-examples-0.9-job.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-core</artifactId>
             <version>0.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mahout-core-0.9-job.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-math</artifactId>
             <version>0.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mahout-math-0.9.jar</systemPath>
+        </dependency>-->
+
+        <!--mahout-->
+       <!-- <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-core</artifactId>
+            <version>0.9</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-examples</artifactId>
+            <version>0.11.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jdk.tools</artifactId>
+                    <groupId>jdk.tools</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-client</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-hdfs</artifactId>
+            <version>0.11.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hadoop-client</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-math</artifactId>
+            <version>0.11.2</version>
+        </dependency>
+
 
 
     </dependencies>
@@ -45,6 +118,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <finalName>mahout-jar-with-dependencies</finalName>
                     <archive>
                         <manifest>
                             <mainClass></mainClass>
@@ -98,7 +172,17 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
+        <!--<resources>
+            <resource>
+                <targetPath>lib/</targetPath>
+                <directory>lib/</directory>
+                <includes>
+                    <include>**/mahout*.jar</include>
+                </includes>
+            </resource>
+        </resources>-->
     </build>
 
 

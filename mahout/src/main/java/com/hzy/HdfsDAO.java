@@ -14,7 +14,7 @@ import java.net.URI;
 public class HdfsDAO {
 
     //HDFS访问地址
-    private static final String HDFS = "hdfs://192.168.70.128:9000/";
+    private static final String HDFS = "hdfs://192.168.70.128:8020/";
 
     public HdfsDAO(Configuration conf) {
         this(HDFS, conf);
