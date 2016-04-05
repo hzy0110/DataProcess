@@ -17,34 +17,40 @@ public class HdfsDAO {
     private static final String HDFS = "hdfs://192.168.70.128:8020/";
 
     public HdfsDAO(Configuration conf) {
-        this(HDFS, conf);
+        this(HDFS,conf);
     }
 
-    public HdfsDAO(String hdfs, Configuration conf) {
+    public HdfsDAO(String hdfs,Configuration conf) {
         this.hdfsPath = hdfs;
-        this.conf = conf;
+        this.conf =  conf;
     }
+
+    //private static final String HDFS = "hdfs://192.168.70.128:8020/";
+
+
+    /*public HdfsDAO() {
+
+        this.conf =  config();
+    }*/
 
     //hdfs路径
     private String hdfsPath;
     //Hadoop系统配置
-    private Configuration conf;
+    private Configuration conf =  config();
 
     //启动函数
     public static void main(String[] args) throws IOException {
-        JobConf conf = config();
-        HdfsDAO hdfs = new HdfsDAO(conf);
+        HdfsDAO hdfs = new HdfsDAO(config());
         hdfs.mkdirs("/tmp/new/two");
         hdfs.ls("/tmp/new");
     }
 
     //加载Hadoop配置文件
-    public static JobConf config(){
-        JobConf conf = new JobConf(HdfsDAO.class);
-        conf.setJobName("HdfsDAO");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+    public static Configuration config(){
+        Configuration conf = new Configuration();
+        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/core-site.xml");
+        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/hdfs-site.xml");
+        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/mapred-site.xml");
         return conf;
     }
 
@@ -52,6 +58,13 @@ public class HdfsDAO {
 
     public void ls(String folder) throws IOException {
         Path path = new Path(folder);
+
+        this.getClass().getResource("/hadoop/core-site.xml");
+
+        String cc = conf.get("fs.default.name");
+        System.out.println("cc: " + cc);
+        //conf.addResource("classpath:/hadoop/core-site.xml").;
+
         FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
         FileStatus[] list = fs.listStatus(path);
         System.out.println("ls: " + folder);
