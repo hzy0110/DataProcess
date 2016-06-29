@@ -1,4 +1,4 @@
-package com.hzy;
+package com.hzy.self;
 
 /**
  * Created by Hzy on 2016/4/2.

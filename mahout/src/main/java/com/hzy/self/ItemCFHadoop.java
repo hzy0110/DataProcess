@@ -1,6 +1,6 @@
-package com.hzy;
+package com.hzy.self;
 
-import org.apache.hadoop.conf.Configuration;
+import com.hzy.self.HdfsDAO;
 import org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
 
 public class ItemCFHadoop {

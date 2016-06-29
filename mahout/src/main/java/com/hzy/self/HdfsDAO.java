@@ -1,9 +1,8 @@
-package com.hzy;
+package com.hzy.self;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
-import org.apache.hadoop.mapred.JobConf;
 
 import java.io.IOException;
 import java.net.URI;

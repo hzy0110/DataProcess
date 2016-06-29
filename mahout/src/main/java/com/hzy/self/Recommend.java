@@ -1,4 +1,4 @@
-package com.hzy;
+package com.hzy.self;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
