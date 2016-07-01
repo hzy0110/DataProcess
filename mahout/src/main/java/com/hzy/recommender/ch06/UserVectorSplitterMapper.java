@@ -23,7 +23,9 @@ public class UserVectorSplitterMapper
 			throws IOException, InterruptedException {
 		long userID = key.get();
 		Vector userVector = value.get();
-		Iterator<Vector.Element> it = userVector.iterateNonZero();
+
+		Iterable<Vector.Element> iterable =  userVector.nonZeroes();
+		Iterator<Vector.Element> it = iterable.iterator();
 		IntWritable itemIndexWritable = new IntWritable();
 		while (it.hasNext()) {
 			Vector.Element e = it.next();

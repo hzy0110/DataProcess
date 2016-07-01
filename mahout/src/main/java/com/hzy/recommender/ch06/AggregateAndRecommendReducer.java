@@ -35,7 +35,7 @@ public class AggregateAndRecommendReducer
 		Configuration jobConf = context.getConfiguration();
 		recommendationsPerUser = jobConf.getInt(NUM_RECOMMENDATIONS,
 				DEFAULT_NUM_RECOMMENDATIONS);
-		indexItemIDMap = TasteHadoopUtils.readItemIDIndexMap(
+		indexItemIDMap = TasteHadoopUtils.readIDIndexMap(
 				jobConf.get(ITEMID_INDEX_PATH), jobConf);
 	}
 
@@ -53,8 +53,10 @@ public class AggregateAndRecommendReducer
 				Collections.reverseOrder(ByValueRecommendedItemComparator
 						.getInstance()));
 
-		Iterator<Vector.Element> recommendationVectorIterator = recommendationVector
-				.iterateNonZero();
+		Iterable<Vector.Element> recommendationVectorIterable = recommendationVector.nonZeroes();
+
+
+		Iterator<Vector.Element> recommendationVectorIterator = recommendationVectorIterable.iterator();
 		while (recommendationVectorIterator.hasNext()) {
 			Vector.Element element = recommendationVectorIterator.next();
 			int index = element.index();
