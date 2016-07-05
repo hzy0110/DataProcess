@@ -87,7 +87,7 @@ public class SimpleKMeansClustering {
             0.001, false);
     
     SequenceFile.Reader reader = new SequenceFile.Reader(fs,
-        new Path("output/" + Kluster.CLUSTERED_POINTS_DIR
+        new Path("output/" + Kluster.FINAL_ITERATION_SUFFIX
                  + "/part-m-00000"), conf);
     
     IntWritable key = new IntWritable();
