@@ -27,22 +27,14 @@ import java.util.Properties;
 public class PropertiesUtil {
     private static Properties properties = null;
     public static void main(String[] args) throws IOException, TasteException {
-        properties = load();
         System.out.println(getValue("channlelevel"));
     }
 
-    public static Properties load()  throws IOException{
+    public static String getValue(String name) throws IOException{
         Properties properties = new Properties();
         InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
         properties.load(input);// 加载属性文件
         input.close();
-        return properties;
-    }
-
-    public static String getValue(String name) {
         return properties.getProperty(name);
     }
-
-
-
 }
