@@ -7,6 +7,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
 import org.apache.mahout.clustering.kmeans.Kluster;
 import org.apache.mahout.clustering.classify.WeightedVectorWritable;
 import org.apache.mahout.clustering.kmeans.KMeansDriver;
@@ -87,11 +88,11 @@ public class SimpleKMeansClustering {
             0.001, false);
     
     SequenceFile.Reader reader = new SequenceFile.Reader(fs,
-        new Path("output/" + Kluster.FINAL_ITERATION_SUFFIX
+        new Path("output/" + "clusteredPoints"
                  + "/part-m-00000"), conf);
     
     IntWritable key = new IntWritable();
-    WeightedVectorWritable value = new WeightedVectorWritable();
+    WeightedPropertyVectorWritable value = new WeightedPropertyVectorWritable();
     while (reader.next(key, value)) {
       System.out.println(value.toString() + " belongs to cluster "
                          + key.toString());
