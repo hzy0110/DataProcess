@@ -13,7 +13,7 @@ import java.net.URI;
 public class HdfsDAO {
 
     //HDFS访问地址
-    private static final String HDFS = "hdfs://192.168.70.128:8020/";
+    private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public HdfsDAO(Configuration conf) {
         this(HDFS,conf);
@@ -47,9 +47,9 @@ public class HdfsDAO {
     //加载Hadoop配置文件
     public static Configuration config(){
         Configuration conf = new Configuration();
-        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/core-site.xml");
-        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/hdfs-site.xml");
-        conf.addResource("E:/Program/Java/IntelliJ/DataProcess/mahout/target/classes/hadoop/mapred-site.xml");
+        conf.addResource(Thread.currentThread().getContextClassLoader().getResource("hadoop/core-site.xml").getFile());
+        conf.addResource(Thread.currentThread().getContextClassLoader().getResource("hadoop/hdfs-site.xml").getFile());
+        conf.addResource(Thread.currentThread().getContextClassLoader().getResource("hadoop/mapred-site.xml").getFile());
         return conf;
     }
 

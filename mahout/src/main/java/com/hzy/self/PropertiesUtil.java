@@ -30,11 +30,18 @@ public class PropertiesUtil {
         System.out.println(getValue("channlelevel"));
     }
 
-    public static String getValue(String name) throws IOException{
-        Properties properties = new Properties();
-        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
-        properties.load(input);// 加载属性文件
-        input.close();
-        return properties.getProperty(name);
+    public static String getValue(String name){
+        try {
+            Properties properties = new Properties();
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
+            String sss = Thread.currentThread().getContextClassLoader().getResource("hadoop/core-site.xml").getFile();
+            properties.load(input);// 加载属性文件
+            input.close();
+            return properties.getProperty(name);
+        }
+        catch (IOException e){
+            return null;
+        }
+
     }
 }
