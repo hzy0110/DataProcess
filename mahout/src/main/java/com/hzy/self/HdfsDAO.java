@@ -100,6 +100,13 @@ public class HdfsDAO {
         fs.close();
     }
 
+//    public void copyFile(String local, String remote) throws IOException {
+//        FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
+//        fs.copyToLocalFile(new Path(local), new Path(remote));
+//        System.out.println("copy from: " + local + " to " + remote);
+//        fs.close();
+//    }
+
 
     public void cat(String remoteFile) throws IOException {
         Path path = new Path(remoteFile);

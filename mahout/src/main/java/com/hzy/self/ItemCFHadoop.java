@@ -8,14 +8,14 @@ public class ItemCFHadoop {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
-        //String localFile = "/home/hzy/tmp/mahout/item.csv";
-        String localFile = "H:/testdata/item.csv";
+        String localFile = "/home/hzy/tmp/mahout/item.csv";
+        //String localFile = "H:/testdata/item.csv";
         String inPath = HDFS + "/mahout/itemCF";
         String inFile = inPath + "/item.csv";
         String outPath = HDFS + "/mahout/itemCF/result/";
         String outFile = outPath + "/part-r-00000";
-        //String tmpPath = HDFS + "/tmp/" + System.currentTimeMillis();
-        String tmpPath = "h:/tmp/" + System.currentTimeMillis();
+        String tmpPath = HDFS + "/tmp/" + System.currentTimeMillis();
+        //String tmpPath = "h:/tmp/" + System.currentTimeMillis();
 
 
         HdfsDAO hdfs = new HdfsDAO(HdfsDAO.config());
