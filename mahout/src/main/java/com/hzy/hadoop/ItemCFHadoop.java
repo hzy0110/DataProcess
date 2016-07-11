@@ -1,6 +1,6 @@
 package com.hzy.hadoop;
 
-import com.hzy.self.PropertiesUtil;
+import com.hzy.util.PropertiesUtil;
 import org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
 
 public class ItemCFHadoop {

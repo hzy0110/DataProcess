@@ -4,7 +4,7 @@ package com.hzy.hadoop;
  * Created by Hzy on 2016/4/2.
  */
 
-import com.hzy.self.PropertiesUtil;
+import com.hzy.util.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.mahout.clustering.conversion.InputDriver;

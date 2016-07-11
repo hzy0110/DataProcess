@@ -1,6 +1,6 @@
 package com.hzy.hadoop;
 
-import com.hzy.self.PropertiesUtil;
+import com.hzy.util.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
