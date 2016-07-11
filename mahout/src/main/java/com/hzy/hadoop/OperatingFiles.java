@@ -1,4 +1,4 @@
-package com.hzy.self;
+package com.hzy.hadoop;
 
 /**
  * Created by Hzy on 2016/4/2.

@@ -1,4 +1,4 @@
-package com.hzy.self;
+package com.hzy.util;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.IRStatistics;

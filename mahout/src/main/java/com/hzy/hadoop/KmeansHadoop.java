@@ -1,13 +1,12 @@
-package com.hzy.self;
+package com.hzy.hadoop;
 
 /**
  * Created by Hzy on 2016/4/2.
  */
 
-import com.hzy.self.HdfsDAO;
+import com.hzy.self.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapred.JobConf;
 import org.apache.mahout.clustering.conversion.InputDriver;
 import org.apache.mahout.clustering.kmeans.KMeansDriver;
 import org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
@@ -16,7 +15,7 @@ import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
 import org.apache.mahout.utils.clustering.ClusterDumper;
 
 public class KmeansHadoop {
-    private static final String HDFS =PropertiesUtil.getValue("hdfs");
+    private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
         String localFile = "/home/hzy/tmp/mahout/randomData.csv";
