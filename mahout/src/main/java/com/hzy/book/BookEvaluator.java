@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
+import org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
@@ -26,6 +27,7 @@ public class BookEvaluator {
         itemEuclidean(dataModel);
         itemLoglikelihood(dataModel);
         itemEuclideanNoPref(dataModel);
+        svd(dataModel);
     }
 
     public static RecommenderBuilder userEuclidean(DataModel dataModel) throws TasteException, IOException {
@@ -90,4 +92,15 @@ public class BookEvaluator {
         RecommendFactory.statsEvaluator(recommenderBuilder, null, dataModel, 2);
         return recommenderBuilder;
     }
+
+    public static RecommenderBuilder svd(DataModel dataModel) throws TasteException {
+        System.out.println("svd");
+        RecommenderBuilder recommenderBuilder = RecommendFactory.svdRecommender(new ALSWRFactorizer(dataModel, 5, 0.05, 10));
+
+        RecommendFactory.evaluate(RecommendFactory.EVALUATOR.AVERAGE_ABSOLUTE_DIFFERENCE, recommenderBuilder, null, dataModel, 0.7);
+        RecommendFactory.statsEvaluator(recommenderBuilder, null, dataModel, 2);
+
+        return recommenderBuilder;
+    }
+
 }
