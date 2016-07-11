@@ -3,11 +3,26 @@ package com.hzy.hadoop;
 import com.hzy.util.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.mahout.clustering.Cluster;
+import org.apache.mahout.clustering.conversion.InputDriver;
 import org.apache.mahout.clustering.kmeans.KMeansDriver;
+import org.apache.mahout.clustering.kmeans.Kluster;
 import org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
+import org.apache.mahout.common.HadoopUtil;
 import org.apache.mahout.common.distance.DistanceMeasure;
 import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
-import org.apache.mahout.utils.clustering.ClusterDumper;
+import org.apache.mahout.math.DenseVector;
+import java.io.IOException;
+import java.util.*;
+import java.io.*;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapred.Reducer;
+import java.util.*;
 
 /**
  * Created by Hzy on 2016/7/11.
@@ -120,5 +135,6 @@ public class kMeansClusterUsingMapReduce {
         kMeansClusterUsingMapReduce kMeansClusterUsingMapReduce = new kMeansClusterUsingMapReduce();
         kMeansClusterUsingMapReduce.setArgs(s);
         kMeansClusterUsingMapReduce.run();
+
     }
 }
