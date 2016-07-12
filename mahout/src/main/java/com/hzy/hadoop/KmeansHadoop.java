@@ -12,8 +12,9 @@ import org.apache.mahout.clustering.kmeans.KMeansDriver;
 import org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
 import org.apache.mahout.common.distance.DistanceMeasure;
 import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+import org.apache.mahout.utils.*;
 import org.apache.mahout.utils.clustering.ClusterDumper;
-
+import org.apache.mahout.utils.SequenceFileDumper;
 public class KmeansHadoop {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
@@ -46,6 +47,13 @@ public class KmeansHadoop {
         System.out.printf("Dumping out clusters from clusters: %s and clusteredPoints: %s\n", outGlobPath, clusteredPointsPath);
 
         ClusterDumper clusterDumper = new ClusterDumper(outGlobPath, clusteredPointsPath);
-        clusterDumper.printClusters(null);
+        //clusterDumper.getOption("-o", outPath + "/clusterDumper.txt");
+        //clusterDumper.printClusters(null);
+
+        SequenceFileDumper sequenceFileDumper = new SequenceFileDumper();
+        //-i hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints  -o ./reuters-kmeans-seqdumper2
+        String[] sfd = {"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints","-o","./reuters-kmeans-seqdumper2"};
+        sequenceFileDumper.run(sfd);
+
     }
 }

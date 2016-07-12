@@ -131,7 +131,7 @@ public class kMeansClusterUsingMapReduce {
         String maxIter = "100";
         String clustering = "true";
         String distanceMeasure = "org.apache.mahout.common.distance.CosineDistanceMeasure";
-        String[] s = {in,out,clusters,k,convergenceDelta,maxIter,clustering,distanceMeasure};
+        String[] s = {args[0],out,clusters,k,convergenceDelta,maxIter,clustering,distanceMeasure};
         kMeansClusterUsingMapReduce kMeansClusterUsingMapReduce = new kMeansClusterUsingMapReduce();
         kMeansClusterUsingMapReduce.setArgs(s);
         kMeansClusterUsingMapReduce.run();

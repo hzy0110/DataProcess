@@ -7,6 +7,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.mahout.clustering.conversion.InputMapper;
@@ -15,7 +16,7 @@ import org.apache.mahout.math.VectorWritable;
 import java.io.IOException;
 
 /**
- * This class converts text files containing space-delimited floating point numbers into
+                               * This class converts text files containing space-delimited floating point numbers into
  * Mahout sequence files of VectorWritable suitable for input to the clustering jobs in
  * particular, and any Mahout job requiring this input in general.
  *
@@ -41,7 +42,7 @@ public  class InputDriver extends Configured implements Tool {
     job.setJarByClass(org.apache.mahout.clustering.conversion.InputDriver.class);
     
     FileInputFormat.addInputPath(job, input);
-    SequenceFileOutputFormat.setOutputPath(job, output);
+    FileOutputFormat.setOutputPath(job, output);
     
     boolean succeeded = job.waitForCompletion(true);
     if (!succeeded) {

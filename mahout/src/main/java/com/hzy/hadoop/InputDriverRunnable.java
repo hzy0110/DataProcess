@@ -34,8 +34,8 @@ public class InputDriverRunnable implements RunnableWithArgs{
         Utils.printStringArr(args);
         try {
             HUtils.delete(output);
- //           ToolRunner.run(HUtils.getConf()	,new InputDriver()	, args);
-			InputDriver.main(args);
+            ToolRunner.run(HUtils.getConf(), new InputDriver(), args);
+//			InputDriver.main(args);
         } catch (Exception e) {
             e.printStackTrace();
             // 任务中，报错，需要在任务监控界面体现出来
@@ -70,12 +70,12 @@ public class InputDriverRunnable implements RunnableWithArgs{
     public static void main(String args[]) {
         String HDFS = PropertiesUtil.getValue("hdfs");
         InputDriverRunnable inputDriverRunnable = new InputDriverRunnable();
-        String in = "/home/hzy/tmp/mahout/randomData.csv";
+        //String in = "/mahout/inputdata/reut2-013.sgm-540.txt";
         //String in = "/home/hzy/tmp/mahout/reuters-out/reut2-017.sgm-987.txt";
         //String in = "H:/testdata/randomData.csv";
         String out = HDFS + "/mahout/inputdeiveout";
         String select_value = "org.apache.mahout.math.RandomAccessSparseVector";
-        String[] s = {in, out, select_value};
+        String[] s = {args[0], out, select_value};
         inputDriverRunnable.setArgs(s);
         inputDriverRunnable.run();
     }
