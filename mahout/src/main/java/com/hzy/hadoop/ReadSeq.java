@@ -70,7 +70,7 @@ public class ReadSeq implements INotMRJob {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
+		String in = "hdfs://master:8020/mahout/hdfs/mix_data1/result/clusteredPoints/part-m-00000";
 		String output = "H:/seq2.dat";
 		//String output = "./reuters-kmeans-seqdumper3";
 		//String lines = "10";

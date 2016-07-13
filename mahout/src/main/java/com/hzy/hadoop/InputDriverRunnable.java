@@ -4,6 +4,7 @@ import com.hzy.util.HUtils;
 import com.hzy.util.InputDriver;
 import com.hzy.util.PropertiesUtil;
 import com.hzy.util.Utils;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
 /**
  * Created by zy on 2016/7/12.
