@@ -92,7 +92,8 @@ public final class ClusterDumper extends AbstractJob {
   }
 
   public static void main(String[] args) throws Exception {
-    new org.apache.mahout.utils.clustering.ClusterDumper().run(args);
+    //new org.apache.mahout.utils.clustering.ClusterDumper().run(args);
+    new ClusterDumper().run(args);
   }
 
   @Override
@@ -148,7 +149,7 @@ public final class ClusterDumper extends AbstractJob {
     measure = ClassUtils.instantiateAs(distanceMeasureClass, DistanceMeasure.class);
 
     init();
-//    printClusters(null);
+    printClusters(null);
     return 0;
   }
 
