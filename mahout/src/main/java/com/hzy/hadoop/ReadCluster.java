@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ¶ÁÈ¡HDFS ¾ÛÀàÖĞĞÄclusterÎÄ¼ş
+ * è¯»å–HDFS èšç±»ä¸­å¿ƒclusteræ–‡ä»¶
  * @author fansy
- * @date 2015Äê8ÔÂ10ÈÕ
+ * @date 2015å¹´8æœˆ10æ—¥
  */
 public class ReadCluster implements INotMRJob {
 	private String input;
@@ -54,7 +54,7 @@ public class ReadCluster implements INotMRJob {
 			ClusterDumper cd = new ClusterDumper();
 			cd.run(args);
 			txt= cd.printClusters(null, "<br>");
-			txt ="¾ÛÀàÖĞĞÄ¼°Êı¾İÊÇ:<br>"+txt;
+			txt ="èšç±»ä¸­å¿ƒåŠæ•°æ®æ˜¯:<br>"+txt;
 			map.put("flag", "true");
 
 			map.put("return_txt", txt);
@@ -62,21 +62,30 @@ public class ReadCluster implements INotMRJob {
 			e.printStackTrace();
 			map.put("flag", "false");
 			map.put("monitor", "false");
-			map.put("msg", input+"¶ÁÈ¡Ê§°Ü£¡");
+			map.put("msg", input+"è¯»å–å¤±è´¥ï¼");
 		}
 		return map;
 	}
 
 	public static void main(String[] args) throws Exception {
-//		String in = "";
-//		String points = "";
-//		String distanceMeasure = "";
-//		String include_per_cluster = "";
-//		String[] s = {args[0],points,distanceMeasure,include_per_cluster};
-//		ReadCluster readCluster =new ReadCluster();
-//		readCluster.setArgs(s);
-//		readCluster.runJob();
+		String in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final";
+		String points = "";
+		String distanceMeasure = "";
+		String include_per_cluster = "";
+		String[] s = {args[0],points,distanceMeasure,include_per_cluster};
+		ReadCluster readCluster =new ReadCluster();
+		readCluster.setArgs(s);
+		readCluster.runJob();
+		/*
+			ç›´æ¥ä½¿ç”¨å‘½ä»¤è¡Œå‚æ•°æˆåŠŸ
+		*  -i   hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final   -o   ./clusters1.dat   -of   TEXT   -p   hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000   -sp   2   -dm   org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure  --tempDir   temp
+		*
+		*
+		* */
 
+
+/*
+		//ç›´æ¥æ‰§è¡ŒmainæˆåŠŸ
 		String[] arg= {
 				"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final",
 				"-o","H:/clusters.dat",
@@ -93,6 +102,7 @@ public class ReadCluster implements INotMRJob {
 
 		//HUtils.getFs().delete(new Path("/use/root/utils/clusterdumper/output"),true);
 		org.apache.mahout.utils.clustering.ClusterDumper.main(arg);
+*/
 
 	}
 

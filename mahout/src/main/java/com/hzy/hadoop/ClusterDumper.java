@@ -40,12 +40,12 @@ import java.io.Writer;
 import java.util.*;
 
 /**
- * µ÷ÓÃ·½Ê½£º
- * 1. ÊµÀı»¯£»
- * 2. µ÷ÓÃrun·½·¨£»
- * 3. µ÷ÓÃprintClusters·½·¨£»
+ * è°ƒç”¨æ–¹å¼ï¼š
+ * 1. å®ä¾‹åŒ–ï¼›
+ * 2. è°ƒç”¨runæ–¹æ³•ï¼›
+ * 3. è°ƒç”¨printClustersæ–¹æ³•ï¼›
  * @author fansy
- * @date 2015Äê8ÔÂ10ÈÕ
+ * @date 2015å¹´8æœˆ10æ—¥
  */
 
 public final class ClusterDumper extends AbstractJob {
@@ -154,7 +154,7 @@ public final class ClusterDumper extends AbstractJob {
 
 
   /**
-   * »ñÈ¡¾ÛÀàÖĞĞÄ×Ö·û´®
+   * è·å–èšç±»ä¸­å¿ƒå­—ç¬¦ä¸²
    * @param dictionary
    * @param splitter
    * @return

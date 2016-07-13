@@ -6,9 +6,9 @@ package com.hzy.hadoop;
 import java.util.Map;
 
 /**
- * Ìá½»·ÇMRÈÎÎñµÄ»ùÀà
+ * æäº¤éMRä»»åŠ¡çš„åŸºç±»
  * @author fansy
- * @date 2015Äê8ÔÂ5ÈÕ
+ * @date 2015å¹´8æœˆ5æ—¥
  */
 public interface INotMRJob {
 

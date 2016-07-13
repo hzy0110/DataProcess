@@ -9,14 +9,15 @@ import java.util.HashMap;
 import java.util.Map;
 //import org.apache.mahout.utils.SequenceFileDumper;
 /**
- * ¶ÁÈ¡HDFS seqÎÄ¼ş
+ * è¯»å–HDFS seqæ–‡ä»¶
  * @author fansy
- * @date 2015Äê8ÔÂ10ÈÕ
+ * @date 2015å¹´8æœˆ10æ—¥
  */
 public class ReadSeq implements INotMRJob {
 	private String input;
 	private String output;
 	private String lines;
+	private String sp;
 
 
 	@Override
@@ -24,6 +25,7 @@ public class ReadSeq implements INotMRJob {
 		this.input=args[0];
 		this.output=args[1];
 		this.lines=args[2];
+		this.sp=args[3];
 	}
 
 	@Override
@@ -36,40 +38,43 @@ public class ReadSeq implements INotMRJob {
 					"-i",input,
 					"-o",output,
 					"-n",lines,
-					"-sp","<br>"
+					"-sp",sp
 			};
 			Utils.printStringArr(args);
 			SequenceFileDumper sf = new SequenceFileDumper();
 			sf.run(args);
 			txt = sf.getRetStr();
-			txt ="ĞòÁĞÎÄ¼şµÄĞÅÏ¢ÊÇ:<br>"+txt;
+			txt ="åºåˆ—æ–‡ä»¶çš„ä¿¡æ¯æ˜¯:<br>"+txt;
 			map.put("flag", "true");
 			map.put("return_txt", txt);
 		}catch(Exception e){
 			e.printStackTrace();
 			map.put("flag", "false");
 			map.put("monitor", "false");
-			map.put("msg", input+"¶ÁÈ¡Ê§°Ü£¡");
+			map.put("msg", input+"è¯»å–å¤±è´¥ï¼");
 		}
 		return map;
 	}
 
 	public static void main(String[] args) throws Exception {
-//		String in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints";
-//		String output = "hdfs://master:8020/mahout/reuters-kmeans-seqdumper-3";
-//		//String output = "./reuters-kmeans-seqdumper3";
-//		String lines = "10";
-//		String[] s = {args[0],args[1],args[2]};
-//		ReadSeq readSeq =new ReadSeq();
-//		readSeq.setArgs(s);
-//		readSeq.runJob();
+		/*String in = "hdfs://192.168.189.142:8020/mahout/hdfs/mix_data/result/clusteredPoints";
+		String output = "H:/seq2.dat";
+		//String output = "./reuters-kmeans-seqdumper3";
+		String lines = "10";
+		//String[] s = {args[0],args[1],args[2]};
+		String[] s = {in,output,lines};
+		ReadSeq readSeq =new ReadSeq();
+		readSeq.setArgs(s);
+		readSeq.runJob();*/
 
-
-		//		  seqdump µÈÓĞĞòÁĞ»¯ÎÄ¼ş²úÉúºó£¬²âÊÔ
+		//mainæµ‹è¯•æˆåŠŸ
+		//		  seqdump ç­‰æœ‰åºåˆ—åŒ–æ–‡ä»¶äº§ç”Ÿåï¼Œæµ‹è¯•
 		String[] arg= {
-				"-i","hdfs://master:8020/mahout/clusteredPoints/part-m-00000",
-				"-o","d:/clusters.dat",
-				"-n","10",
+				//"-i","hdfs://master:8020/mahout/clusteredPoints/part-m-00000",
+				"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000",
+				"-o","H:/seq11.dat",
+				"-sp","\n",
+				//"-n","10",
 //				"--help"
 
 		};
