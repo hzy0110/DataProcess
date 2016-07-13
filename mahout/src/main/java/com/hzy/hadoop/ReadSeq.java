@@ -24,8 +24,10 @@ public class ReadSeq implements INotMRJob {
 	public void setArgs(String[] args) {
 		this.input=args[0];
 		this.output=args[1];
-		this.lines=args[2];
-		this.sp=args[3];
+		this.sp=args[2];
+		if(args.length == 4)
+		this.lines=args[3];
+
 	}
 
 	@Override
@@ -34,12 +36,23 @@ public class ReadSeq implements INotMRJob {
 		String txt =null;
 		map.put("return_show", "readseq_return");
 		try{
-			String[] args=new String[]{
-					"-i",input,
-					"-o",output,
-					"-n",lines,
-					"-sp",sp
-			};
+			String[] args=null;
+			if(lines != null){
+				args = new String[8];
+				args[6] = "-n";
+				args[7] = lines;
+			}
+			else{
+				args = new String[6];
+			}
+			args[0] = "-i";
+			args[1] = input;
+			args[2] = "-o";
+			args[3] = output;
+			args[4] = "-sp";
+			args[5] = sp;
+
+
 			Utils.printStringArr(args);
 			SequenceFileDumper sf = new SequenceFileDumper();
 			sf.run(args);
@@ -57,17 +70,18 @@ public class ReadSeq implements INotMRJob {
 	}
 
 	public static void main(String[] args) throws Exception {
-		/*String in = "hdfs://192.168.189.142:8020/mahout/hdfs/mix_data/result/clusteredPoints";
+		String in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
 		String output = "H:/seq2.dat";
 		//String output = "./reuters-kmeans-seqdumper3";
-		String lines = "10";
+		//String lines = "10";
+		String sp = "\n";
 		//String[] s = {args[0],args[1],args[2]};
-		String[] s = {in,output,lines};
+		String[] s = {in,output,sp};
 		ReadSeq readSeq =new ReadSeq();
 		readSeq.setArgs(s);
-		readSeq.runJob();*/
+		readSeq.runJob();
 
-		//main测试成功
+/*		//main测试成功
 		//		  seqdump 等有序列化文件产生后，测试
 		String[] arg= {
 				//"-i","hdfs://master:8020/mahout/clusteredPoints/part-m-00000",
@@ -79,7 +93,7 @@ public class ReadSeq implements INotMRJob {
 
 		};
 //		TestHUtils.getFs().delete(new Path("temp"), true);
-		SequenceFileDumper.main(arg);
+		SequenceFileDumper.main(arg);*/
 
 	}
 
