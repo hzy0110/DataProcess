@@ -82,13 +82,12 @@ public class ReadCluster implements INotMRJob {
 		ReadCluster readCluster =new ReadCluster();
 		readCluster.setArgs(s);
 		readCluster.runJob();*/
-/*
 		//直接执行main成功
 		String[] arg= {
-				"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final",
+				"-i","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusters-*-final",
 				"-o","H:/clusters.dat",
 				"-of","TEXT",
-				"-p","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000",
+				"-p","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusteredPoints/part-m-00000",
 				"-sp","2",
 //			"-e",
 				"-dm","org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure",
@@ -100,7 +99,7 @@ public class ReadCluster implements INotMRJob {
 
 		//HUtils.getFs().delete(new Path("/use/root/utils/clusterdumper/output"),true);
 		//org.apache.mahout.utils.clustering.ClusterDumper.main(arg);
-		ClusterDumper.main(arg);*/
+		ClusterDumper.main(arg);
 			/*直接使用命令行参数成功
 		mahout clusterdump  -i   hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final   -o   ./clusters1.dat   -of   TEXT   -p   hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000   -sp   2   -dm   org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure  --tempDir   temp
 		*/
