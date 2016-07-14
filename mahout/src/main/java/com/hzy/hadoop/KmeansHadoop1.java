@@ -19,6 +19,19 @@ public class KmeansHadoop1 {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
+/*
+
+
+
+ //请勿改动，保持InputDriver模式，测试请拷贝新文件
+
+
+
+
+
+
+
+        */
         String localFile = "/home/hzy/tmp/mahout/input/randomData.csv";
         String inPath = HDFS + "/mahout/hdfs/mix_data1";
         String seqFile = inPath + "/seqfile";

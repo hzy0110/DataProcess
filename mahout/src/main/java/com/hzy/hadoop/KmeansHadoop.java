@@ -67,7 +67,8 @@ public class KmeansHadoop {
 
 
         //in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final";
-        outcluster = "/home/hzy/tmp/mahout/out/cluster2.dat";
+        //outcluster = "/home/hzy/tmp/mahout/out/cluster2.dat";
+        outcluster = outPath + "cluster2.dat";
         //String points = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
         //String points = clusteredPoints;
         distanceMeasure = "org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure";
@@ -82,7 +83,8 @@ public class KmeansHadoop {
         //-i hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints  -o ./reuters-kmeans-seqdumper2
         //String[] sfd = {"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints","-o","./reuters-kmeans-seqdumper2"};
         //in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
-        out = "/home/hzy/tmp/mahout/out/seq2.dat";
+        //out = "/home/hzy/tmp/mahout/out/seq2.dat";
+        out = outPath + "seq2.dat";
         String sp = "\n";
         String[] parSFD = {clusteredPoints,out,sp};
         readSeq.setArgs(parSFD);

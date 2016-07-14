@@ -83,9 +83,11 @@ public class ReadCluster implements INotMRJob {
 		readCluster.setArgs(s);
 		readCluster.runJob();*/
 		//直接执行main成功
+		//"-o","H:/clusters.dat",
 		String[] arg= {
 				"-i","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusters-*-final",
-				"-o","H:/clusters.dat",
+
+				"-o","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/cluster-9.dat",
 				"-of","TEXT",
 				"-p","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusteredPoints/part-m-00000",
 				"-sp","2",

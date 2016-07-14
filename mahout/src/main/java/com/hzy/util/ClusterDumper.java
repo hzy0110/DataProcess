@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -225,7 +226,7 @@ public final class ClusterDumper extends AbstractJob {
       writer = new OutputStreamWriter(System.out, Charsets.UTF_8);
     } else {
       shouldClose = true;
-      if (outputFile.getName().startsWith("s3n://")) {
+      if (outputPath.toString().startsWith("hdfs://")) {
         Path p = outputPath;
         FileSystem fs = FileSystem.get(p.toUri(), conf);
         writer = new OutputStreamWriter(fs.create(p), Charsets.UTF_8);

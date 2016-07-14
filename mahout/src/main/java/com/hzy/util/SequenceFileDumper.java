@@ -82,7 +82,14 @@ public final class SequenceFileDumper extends AbstractJob {
 		boolean shouldClose;
 		if (this.hasOption("output")) {
 			shouldClose = true;
-			writer = Files.newWriter(new File(this.getOption("output")), Charsets.UTF_8);
+			if (outputPath.toString().startsWith("hdfs://")) {
+				Path p = outputPath;
+				FileSystem fs1 = FileSystem.get(p.toUri(), conf);
+				writer = new OutputStreamWriter(fs.create(p), Charsets.UTF_8);
+			} else {
+				Files.createParentDirs(outputFile);
+				writer = Files.newWriter(new File(this.getOption("output")), Charsets.UTF_8);
+			}
 		} else {
 			shouldClose = false;
 			writer = new OutputStreamWriter(System.out, Charsets.UTF_8);
