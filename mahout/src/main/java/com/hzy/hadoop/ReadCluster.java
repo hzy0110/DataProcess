@@ -84,16 +84,26 @@ public class ReadCluster implements INotMRJob {
 		readCluster.runJob();*/
 		//直接执行main成功
 		//"-o","H:/clusters.dat",
-		String[] arg= {
-				"-i","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusters-*-final",
+		//
+		//"-d","hdfs://192.168.189.142:8020/mahout/hdfs/reuters-vectors-bigram-2/dictionary.file-0",
+		//"-d","/home/hzy/tmp/mahout/out/dictionary.file-0",
+		//"-d","H:/dictionary.file-0",
 
-				"-o","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/cluster-9.dat",
+		//增加-d,"-dt", "sequencefile", 后会出现Top Terms:，并且使得我们输出结果中，可以直接显示每个簇，权重最高的词文本，而不是词id。
+		//上面映射类型，由于我们是seqdictionary生成的
+		String[] arg= {
+				"-i","hdfs://master:8020/mahout/hdfs/mix_data2/result/clusters-*-final",
+
+				"-o","hdfs://master:8020/mahout/hdfs/mix_data2/result/cluster-9.dat",
 				"-of","TEXT",
-				"-p","hdfs://192.168.189.142:8020/mahout/hdfs/mix_data2/result/clusteredPoints/part-m-00000",
+				"-p","hdfs://master:8020/mahout/hdfs/mix_data2/result/clusteredPoints/part-m-00000",
 				"-sp","2",
 //			"-e",
+				"-dt", "sequencefile",
+				"-d","hdfs://192.168.189.142:8020/mahout/hdfs/reuters-vectors-bigram-2/dictionary.file-0",
 				"-dm","org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure",
 				"--tempDir","temp",
+				"-n","5"
 //				"--help"
 		};
 		//HUtils.getFs().delete(new Path("temp"), true);

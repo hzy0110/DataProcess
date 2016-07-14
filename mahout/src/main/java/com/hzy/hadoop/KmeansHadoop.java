@@ -71,11 +71,12 @@ public class KmeansHadoop {
         //mahout seq2sparse -i /mahout/hdfs/reuters-seq-2 -o /mahout/hdfs/reuters-sparse-2-1 -ow --weight tfidf --maxDFPercent 85 --namedVector
         //SparseVectorsFromSequenceFiles 实现将 SequenceFiles 中的数据进行向量化。
         // 它其实本身是一个工具类，可以直接用命令行调用，这里直接调用了它的 main 方法
+        //--namedVector
         //  "-chunk", "200", "-a","org.apache.lucene.analysis.WhitespaceAnalyzer","-s", "5","-md", "3","-ng", "2",  "-ml", "50"
         String[] svff = {"-i", sequenceFilesFromDirectoryOut, "-o",sparseVectorsFromSequenceFilesOut,"-ow",
                 //String[] svff = {"-i", "hdfs://master:8020/mahout/hdfs/reuters-seq-1", "-o","hdfs://master:8020/mahout/hdfs/reuters-vectors-bigram-1","-ow",
                 "-wt", "tfidf",
-                "-x", "90","--namedVector"};
+                "-x", "90","-nv"};
         //mahout seq2sparse -i /mahout/hdfs/reuters-seq-1 -o /mahout/hdfs/reuters-sparse-1 -ow --weight tfidf --maxDFPercent 85 --namedVector
 
         // 解释一下参数的意义：
@@ -133,7 +134,7 @@ public class KmeansHadoop {
         //String points = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
         //String points = clusteredPoints;
         distanceMeasure = "org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure";
-        String include_per_cluster = "-1";
+        String include_per_cluster = "10";
         System.out.println("outGlobPath.toString() =" + outGlobPath.toString());
         String[] parCD = {outGlobPath.toString(),outcluster,clusteredPoints,distanceMeasure,include_per_cluster};
         readCluster.setArgs(parCD);
