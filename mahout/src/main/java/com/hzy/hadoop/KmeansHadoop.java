@@ -7,20 +7,19 @@ package com.hzy.hadoop;
 import com.hzy.util.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.mahout.clustering.conversion.InputDriver;
-import org.apache.mahout.clustering.kmeans.KMeansDriver;
-import org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
-import org.apache.mahout.common.distance.DistanceMeasure;
-import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
-import org.apache.mahout.utils.*;
-import org.apache.mahout.utils.clustering.ClusterDumper;
-import org.apache.mahout.utils.SequenceFileDumper;
 public class KmeansHadoop {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
-        String localFile = "/home/hzy/tmp/mahout/randomData.csv";
-        String inPath = HDFS + "/mahout/hdfs/mix_data";
+        InputDriverRunnable inputDriverRunnable = new InputDriverRunnable();
+        kMeansClusterUsingMapReduce kMeansClusterUsingMapReduce = new kMeansClusterUsingMapReduce();
+        ReadCluster readCluster =new ReadCluster();
+        ReadSeq readSeq =new ReadSeq();
+
+
+
+        String localFile =HDFS +  "/mahout/inputdata/randomData.csv";
+        String inPath = HDFS + "/mahout/hdfs/mix_data1";
         String seqFile = inPath + "/seqfile";
         String seeds = inPath + "/seeds";
         String outPath = inPath + "/result/";
@@ -29,31 +28,62 @@ public class KmeansHadoop {
         HdfsDAO hdfs = new HdfsDAO(HDFS, conf);
         hdfs.rmr(inPath);
         hdfs.mkdirs(inPath);
-        hdfs.copyFile(localFile, inPath);
+        //hdfs.copyFile(localFile, inPath);
         hdfs.ls(inPath);
 
-        InputDriver.runJob(new Path(inPath), new Path(seqFile), "org.apache.mahout.math.RandomAccessSparseVector");
+        String in = "";
+        String out = "";
+        String select_value = "";
+        String outcluster = "";
 
-        int k = 3;
-        Path seqFilePath = new Path(seqFile);
-        Path clustersSeeds = new Path(seeds);
-        DistanceMeasure measure = new EuclideanDistanceMeasure();
-        clustersSeeds = RandomSeedGenerator.buildRandom(conf, seqFilePath, clustersSeeds, k, measure);
-        KMeansDriver.run(conf, seqFilePath, clustersSeeds, new Path(outPath), 0.01, 10, true, 0.01, false);
+        //in = "H:/testdata/randomData.csv";
+        //out = HDFS + "/mahout/inputdeiveout";
+        select_value = "org.apache.mahout.math.RandomAccessSparseVector";
+        String[] s = {localFile, seqFile, select_value};
+        inputDriverRunnable.setArgs(s);
+        inputDriverRunnable.run();
 
 
-        Path outGlobPath = new Path(outPath, "clusters-*-final");
+        //in  = HDFS +"/mahout/reuters-sparse/tfidf-vectors";
+        //out = HDFS +"/mahout/kmeans/"+"resule";
+        String clusters = "clusters-*-final";
+        String k = "3";
+        String convergenceDelta = "0.1";
+        String maxIter = "10";
+        String clustering = "true";
+        String distanceMeasure = "org.apache.mahout.common.distance.CosineDistanceMeasure";
+        String[] parKM = {seqFile,outPath,clusters,k,convergenceDelta,maxIter,clustering,distanceMeasure};
+        kMeansClusterUsingMapReduce.setArgs(parKM);
+        kMeansClusterUsingMapReduce.run();
+
+
+        Path outGlobPath = new Path(outPath, clusters);
         Path clusteredPointsPath = new Path(clusteredPoints);
         System.out.printf("Dumping out clusters from clusters: %s and clusteredPoints: %s\n", outGlobPath, clusteredPointsPath);
 
-        ClusterDumper clusterDumper = new ClusterDumper(outGlobPath, clusteredPointsPath);
-        //clusterDumper.getOption("-o", outPath + "/clusterDumper.txt");
-        //clusterDumper.printClusters(null);
 
-        SequenceFileDumper sequenceFileDumper = new SequenceFileDumper();
+        ClusterDumper clusterDumper = new ClusterDumper();
+        //in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusters-3-final";
+        outcluster = "/home/hzy/tmp/mahout/out/cluster.dat";
+        //String points = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
+        //String points = clusteredPoints;
+        distanceMeasure = "org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure";
+        String include_per_cluster = "-1";
+        //System.out.printf("outGlobPath.toString() =", outGlobPath.toUri().getPath());
+        String[] parCD = {outGlobPath.toString(),outcluster,clusteredPoints,distanceMeasure,include_per_cluster};
+        readCluster.setArgs(parCD);
+        readCluster.runJob();
+
+
+
         //-i hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints  -o ./reuters-kmeans-seqdumper2
-        String[] sfd = {"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints","-o","./reuters-kmeans-seqdumper2"};
-        sequenceFileDumper.run(sfd);
+        //String[] sfd = {"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints","-o","./reuters-kmeans-seqdumper2"};
+        //in = "hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000";
+        out = "/home/hzy/tmp/mahout/out/seq.dat";
+        String sp = "\n";
+        String[] parSFD = {clusteredPoints,out,sp};
+        readSeq.setArgs(parSFD);
+        readSeq.runJob();
 
     }
 }
