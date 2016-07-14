@@ -3,6 +3,7 @@
  */
 package com.hzy.hadoop;
 
+import com.hzy.util.ClusterDumper;
 import com.hzy.util.HUtils;
 import com.hzy.util.Utils;
 import org.apache.hadoop.fs.Path;
@@ -66,7 +67,7 @@ public class ReadCluster implements INotMRJob {
 			e.printStackTrace();
 			map.put("flag", "false");
 			map.put("monitor", "false");
-			map.put("msg", input+"读取失败！");
+			map.put("msg", input+"读取失败");
 		}
 		return map;
 	}

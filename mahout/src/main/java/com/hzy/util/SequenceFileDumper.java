@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.hzy.hadoop;
+package com.hzy.util;
 
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;

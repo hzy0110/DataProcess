@@ -5,8 +5,10 @@ package com.hzy.hadoop;
  */
 
 import com.hzy.util.PropertiesUtil;
+import com.hzy.util.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+
 public class KmeansHadoop {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 

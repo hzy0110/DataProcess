@@ -3,6 +3,7 @@
  */
 package com.hzy.hadoop;
 
+import com.hzy.util.SequenceFileDumper;
 import com.hzy.util.Utils;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class ReadSeq implements INotMRJob {
 			e.printStackTrace();
 			map.put("flag", "false");
 			map.put("monitor", "false");
-			map.put("msg", input+"读取失败！");
+			map.put("msg", input+"读取失败!");
 		}
 		return map;
 	}
@@ -82,7 +83,7 @@ public class ReadSeq implements INotMRJob {
 		readSeq.runJob();
 
 /*		//main测试成功
-		//		  seqdump 等有序列化文件产生后，测试
+		//		  seqdump 等有序列化文件产生后，测�?
 		String[] arg= {
 				//"-i","hdfs://master:8020/mahout/clusteredPoints/part-m-00000",
 				"-i","hdfs://master:8020/mahout/hdfs/mix_data/result/clusteredPoints/part-m-00000",
