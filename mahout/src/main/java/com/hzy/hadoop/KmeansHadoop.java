@@ -21,11 +21,11 @@ public class KmeansHadoop {
 
 
         String localFile =HDFS +  "/mahout/inputdata/randomData.csv";
-        String inPath = HDFS + "/mahout/hdfs/mix_data1";
+        String inPath = HDFS + "/mahout/hdfs/mix_data";
         String seqFile = inPath + "/seqfile";
         String seeds = inPath + "/seeds";
         String outPath = inPath + "/result/";
-        String clusteredPoints = outPath + "/clusteredPoints";
+        String clusteredPoints = outPath + "clusteredPoints";
         Configuration conf = HdfsDAO.config();
         HdfsDAO hdfs = new HdfsDAO(HDFS, conf);
         hdfs.rmr(inPath);

@@ -19,8 +19,8 @@ public class KmeansHadoop1 {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
-        String localFile = "/home/hzy/tmp/mahout/randomData.csv";
-        String inPath = HDFS + "/mahout/hdfs/mix_data";
+        String localFile = "/home/hzy/tmp/mahout/input/randomData.csv";
+        String inPath = HDFS + "/mahout/hdfs/mix_data1";
         String seqFile = inPath + "/seqfile";
         String seeds = inPath + "/seeds";
         String outPath = inPath + "/result";

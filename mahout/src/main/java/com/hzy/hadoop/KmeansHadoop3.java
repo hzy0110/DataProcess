@@ -6,25 +6,23 @@ package com.hzy.hadoop;
 
 import com.hzy.util.PropertiesUtil;
 import com.hzy.util.SparseVectorsFromSequenceFiles;
-import com.hzy.util.SequenceFilesFromDirectory;
 
-public class KmeansHadoop2 {
+public class KmeansHadoop3 {
     private static final String HDFS = PropertiesUtil.getValue("hdfs");
 
     public static void main(String[] args) throws Exception {
-//        mahout seqdirectory -i /mahout/hdfs/input/ -o /mahout/hdfs/reuters-seq-4 -c UTF-8 -xm mapreduce
+//        mahout seqdirectory -i /mahout/hdfs/input/ -o /mahout/hdfs/reuters-seq-4 -c UTF-8
 //        mahout seqdirectory -i file://$(pwd)/reuters-out/ -o file://$(pwd)/reuters-seq-5/ -c UTF-8 -xm sequential
-        //java -cp mahout-1.0-SNAPSHOT.jar com.hzy.hadoop.KmeansHadoop2 /mahout/hdfs/input/ /mahout/hdfs/reuters-seq-6
         //SequenceFilesFromDirectory 实现将某个文件目录下的所有文件写入一个 SequenceFiles 的功能
         // 它其实本身是一个工具类，可以直接用命令行调用，这里直接调用了它的 main 方法
-        String[] sffd = {"-c", "UTF-8", "-i", args[0], "-o", args[1],"-xm","mapreduce","-ow"};
+        String[] sffd = {"-c", "UTF-8", "-i", args[0], "-o", args[1]};
         // 解释一下参数的意义：
         // 	 -c: 指定文件的编码形式，这里用的是"UTF-8"
         // 	 -i: 指定输入的文件目录，这里指到我们刚刚导出文件的目录
         // 	 -o: 指定输出的文件目录
 
         try {
-            SequenceFilesFromDirectory.main(sffd);
+            //SequenceFilesFromDirectory.main(sffd);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,7 +31,7 @@ public class KmeansHadoop2 {
 
 
     SparseVectorsFromSequenceFiles sparseVectorsFromSequenceFiles = new SparseVectorsFromSequenceFiles();
-//java -cp mahout-1.0-SNAPSHOT.jar com.hzy.hadoop.KmeansHadoop2 /mahout/hdfs/input/ /mahout/hdfs/reuters-seq-6 /mahout/hdfs/reuters-vectors-bigram-6-1
+//java -cp mahout-1.0-SNAPSHOT.jar com.hzy.hadoop.KmeansHadoop2 hdfs://master:8020/mahout/hdfs/reuters-seq-1 hdfs://master:8020/mahout/hdfs/reuters-vectors-bigram-1
 
 //        mahout seq2sparse -i /mahout/hdfs/reuters-seq-4  -o /mahout/hdfs/reuters-vectors-4 -lnorm -nv -wt tfidf -ow
         //mahout seq2sparse -i /mahout/hdfs/reuters-seq-2 -o /mahout/hdfs/reuters-sparse-2-1 -ow --weight tfidf --maxDFPercent 85 --namedVector
