@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import com.hzy.util.HUtils;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -35,7 +37,12 @@ public class AssesserMapper extends Mapper<IntWritable, WeightedPropertyVectorWr
 		private static final Logger log = LoggerFactory.getLogger(ClusterAssesser.class);
 		protected void setup(Context context) throws IOException, InterruptedException {
 		    super.setup(context);
+
 		    Configuration conf = HUtils.getConf();
+
+		    
+		    //Configuration conf = context.getConfiguration();
+
 		    String clustersIn = conf.get(ClusterClassificationConfigKeys.CLUSTERS_IN);
 		    		    
 		    clusterModels = Lists.newArrayList();
@@ -53,7 +60,7 @@ public class AssesserMapper extends Mapper<IntWritable, WeightedPropertyVectorWr
 		/**
 		   * Populates a list with clusters present in clusters-*-final directory.
 		   * 
-		   * @param clusterOutputPath
+		   * @param clustersIn
 		   *          The output path of the clustering.
 		   * @param conf
 		   *          The Hadoop Configuration

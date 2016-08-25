@@ -2,7 +2,9 @@ package com.hzy.hadoop;
 
 import java.io.IOException;
 
+
 import com.hzy.util.HUtils;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
@@ -25,7 +27,9 @@ import org.slf4j.LoggerFactory;
 public class ClusterAssesser extends AbstractJob {
 
 	private ClusterAssesser() {
+
 		setConf(HUtils.getConf());
+
 	}
 	public int run(String[] args) throws Exception {
 		addInputOption();
