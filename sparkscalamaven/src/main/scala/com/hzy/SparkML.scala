@@ -1,5 +1,5 @@
 package com.hzy
-
+/*
 // General purpose library
 import scala.xml._
 
@@ -16,7 +16,7 @@ import org.apache.spark.ml.classification
 .LogisticRegression
 import org.apache.spark.mllib.evaluation
 .BinaryClassificationMetrics
-import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline*/
 /**
  * Created by zy on 2016/2/23.
  */
