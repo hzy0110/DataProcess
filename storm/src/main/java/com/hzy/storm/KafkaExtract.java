@@ -1,4 +1,4 @@
-package com.hzy.kafka;
+package com.hzy.storm;
 
 
 import backtype.storm.spout.SchemeAsMultiScheme;

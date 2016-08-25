@@ -12,7 +12,7 @@ import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
 import com.hzy.storm.StormTransform.KafkaWordToUpperCase;
 import com.hzy.storm.StormExport.RealtimeBolt;
-import com.hzy.kafka.KafkaExtract;
+import com.hzy.storm.KafkaExtract;
 import com.hzy.hdfs.HdfsExport;
 import storm.kafka.*;
 
