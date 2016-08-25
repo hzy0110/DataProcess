@@ -29,27 +29,26 @@ public final class KafkaSpark {
     private KafkaSpark() {
     }
 
-
     public static void main(String[] args) {
-        if (args.length < 4) {
-            System.err.println("Usage: JavaKafkaWordCount <zkQuorum> <group> <topics> <numThreads>");
-            System.exit(1);
-        }
+//        if (args.length < 4) {
+//            System.err.println("Usage: JavaKafkaWordCount <zkQuorum> <group> <topics> <numThreads>");
+//            System.exit(1);
+//        }
 
         //StreamingExamples.setStreamingLogLevels();
         SparkConf sparkConf = new SparkConf().setAppName("JavaKafkaWordCount");
         // Create the context with 2 seconds batch size
         JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(2000));
 
-        int numThreads = Integer.parseInt(args[3]);
+        int numThreads = Integer.parseInt(PropertiesUtil.getValue("ConsumerGroupExampleThreads"));
         Map<String, Integer> topicMap = new HashMap<String, Integer>();
-        String[] topics = args[2].split(",");
+        String[] topics = PropertiesUtil.getValue("Topic").split(",");
         for (String topic: topics) {
             topicMap.put(topic, numThreads);
         }
 
         JavaPairReceiverInputDStream<String, String> messages =
-                KafkaUtils.createStream(jssc, args[0], args[1], topicMap);
+                KafkaUtils.createStream(jssc, PropertiesUtil.getValue("ZooKeeper"), PropertiesUtil.getValue("GroupId"), topicMap);
 
         JavaDStream<String> lines = messages.map(new Function<Tuple2<String, String>, String>() {
             @Override
@@ -64,7 +63,6 @@ public final class KafkaSpark {
                 return Lists.newArrayList(SPACE.split(x));
             }
         });
-
         JavaPairDStream<String, Integer> wordCounts = words.mapToPair(
                 new PairFunction<String, String, Integer>() {
                     @Override
@@ -77,7 +75,6 @@ public final class KafkaSpark {
                 return i1 + i2;
             }
         });
-
         wordCounts.print();
         jssc.start();
         jssc.awaitTermination();
