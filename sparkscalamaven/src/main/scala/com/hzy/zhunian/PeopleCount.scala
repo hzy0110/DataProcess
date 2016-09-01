@@ -2,6 +2,7 @@ package com.hzy.zhunian
 
 import org.apache.spark.{SparkConf, SparkContext}
 /**
+ * 计算每个人的出勤次数（每时段算1次）
  * Created by Hzy on 2016/2/17.
  */
 object PeopleCount {
@@ -13,7 +14,7 @@ object PeopleCount {
 //    }
     val conf = new SparkConf().setAppName("zhunian_PeopleCount");
     val sc = new SparkContext(conf);
-    val textFile = sc.textFile("/zhunian/zhunian.txt");
+    val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
     println("textFile.count()" + textFile.count())
 /*    var mapfirst = textFile.flatMap(line => line.split("-")(1))
     println("mapfirst.count()" + mapfirst.count())
@@ -26,8 +27,16 @@ object PeopleCount {
        println("mapfirst1.count()" + mapfirst3.count())*/
 
     //val textFile = sc.textFile("file://H:/TestData/zhunian.txt");
-    val nameDate = textFile.map(line => line.split("-")(1))
-    val wordCounts = nameDate.flatMap(line => line.split(",")).map(
+//    val nameDate = textFile.map(line => line.split("-")(1))
+
+    val nameDate = textFile.map(line => line.split("-"))
+    val nameDate1 = nameDate.map(line =>{
+      if(line.length > 1){
+        line(1)
+      }
+    })
+
+    val wordCounts = nameDate1.flatMap(line => line.toString.split(",")).map(
       word => (word, 1)).reduceByKey((a, b) => a + b).sortBy(_._2, false)
     //.coalesce(1, shuffle = true)把多个文件合并一个
     wordCounts.coalesce(1, shuffle = true).saveAsTextFile(filename +System.currentTimeMillis());

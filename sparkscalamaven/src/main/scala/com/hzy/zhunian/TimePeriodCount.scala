@@ -5,6 +5,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 import scala.collection.mutable.ArrayBuffer
 
 /**
+ * 计算每时段的人数，按日平均
   * Created by Hzy on 2016/2/17.
   */
 object TimePeriodCount {
@@ -16,7 +17,7 @@ object TimePeriodCount {
      //    }
      val conf = new SparkConf().setAppName("zhunian_TimePeriodCount");
      val sc = new SparkContext(conf);
-     val textFile = sc.textFile("/zhunian/zhunian.txt");
+     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
      println("-------------------textFile.count()=" + textFile.count())
 
      val tpDate = textFile.map(line => line.substring(22, 24))
