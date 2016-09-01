@@ -1,18 +1,17 @@
-package com.hzy
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
+package com.hzy.zhunian
+
+import org.apache.spark.{SparkConf, SparkContext}
 /**
  * Created by Hzy on 2016/2/17.
  */
-object SparkWordCount {
-  def filename:String  = "zhunian_";
+object PeopleCount {
+  def filename:String  = "zhunian_PeopleCount_";
   def main(args:Array[String]) {
 //    if (args.length < 1) {
 //      println("Usage:SparkWordCount FileName");
 //      System.exit(1);
 //    }
-    val conf = new SparkConf().setAppName("Spark Exercise: Spark Version Word Count Program");
+    val conf = new SparkConf().setAppName("zhunian_PeopleCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian.txt");
     println("textFile.count()" + textFile.count())
@@ -45,7 +44,7 @@ object SparkWordCount {
       word => (word, 1)).reduceByKey((a, b) => a + b)*/
 
     //wordCounts.saveAsTextFile(filename +System.currentTimeMillis());
-    println("Word Count program running results are successfully saved.");
+    //println("Word Count program running results are successfully saved.");
   }
 
 }
