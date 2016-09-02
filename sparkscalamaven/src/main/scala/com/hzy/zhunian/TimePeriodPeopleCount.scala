@@ -3,7 +3,7 @@ package com.hzy.zhunian
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
- * 计算每时段的人数，按日平均
+ * 计算哪个时段最常出现哪些人
   * Created by Hzy on 2016/2/17.
   */
 object TimePeriodPeopleCount {
