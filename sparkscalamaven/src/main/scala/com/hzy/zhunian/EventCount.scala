@@ -10,21 +10,15 @@ object EventCount {
   def filename: String = "zhunian_EventCount_";
 
   def main(args: Array[String]) {
-    //    if (args.length < 1) {
-    //      println("Usage:SparkWordCount FileName");
-    //      System.exit(1);
-    //    }
     val conf = new SparkConf().setAppName("zhunian_EventCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
 
 
     //计算每行人数
-    val znpCount = textFile.map(line => (line.split(":")(0),line.split("-"))).map(line => (line._1 ,{
-      if(line._2.length > 1){
-        line._2(1)
-      }
-    })).map(line => (line._1,line._2.toString.split(",").length)).
+    val znpCount = textFile.map(line => (line.split(":")(0),line.split("-"))).
+      filter(line =>line._2.length > 1).
+      map(line => (line._1,line._2(1).split(",").length)).
       reduceByKey((a, b) => a + b).sortBy(_._2, false)
 
     znpCount.coalesce(1, shuffle = true).saveAsTextFile(filename +System.currentTimeMillis());

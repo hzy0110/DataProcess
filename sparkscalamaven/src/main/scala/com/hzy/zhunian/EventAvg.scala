@@ -7,14 +7,10 @@ import org.apache.spark.{SparkConf, SparkContext}
   * Created by Hzy on 2016/2/17.
   */
 object EventAvg {
-  def filename: String = "zhunian_EventAvgCount_";
+  def filename: String = "zhunian_EventAvg_";
 
   def main(args: Array[String]) {
-    //    if (args.length < 1) {
-    //      println("Usage:SparkWordCount FileName");
-    //      System.exit(1);
-    //    }
-    val conf = new SparkConf().setAppName("zhunian_EventAvgCount");
+    val conf = new SparkConf().setAppName("zhunian_Event");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
 

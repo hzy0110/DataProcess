@@ -8,10 +8,6 @@ import org.apache.spark.{SparkConf, SparkContext}
 object PeopleCount {
   def filename:String  = "zhunian_PeopleCount_";
   def main(args:Array[String]) {
-//    if (args.length < 1) {
-//      println("Usage:SparkWordCount FileName");
-//      System.exit(1);
-//    }
     val conf = new SparkConf().setAppName("zhunian_PeopleCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
@@ -30,13 +26,9 @@ object PeopleCount {
 //    val nameDate = textFile.map(line => line.split("-")(1))
 
     val nameDate = textFile.map(line => line.split("-"))
-    val nameDate1 = nameDate.map(line =>{
-      if(line.length > 1){
-        line(1)
-      }
-    })
-
-    val wordCounts = nameDate1.flatMap(line => line.toString.split(",")).map(
+    val nameDate1 = nameDate.
+      filter(line =>line.length > 1)
+    val wordCounts = nameDate1.flatMap(line => line(1).split(",")).map(
       word => (word, 1)).reduceByKey((a, b) => a + b).sortBy(_._2, false)
     //.coalesce(1, shuffle = true)把多个文件合并一个
     wordCounts.coalesce(1, shuffle = true).saveAsTextFile(filename +System.currentTimeMillis());

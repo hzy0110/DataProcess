@@ -11,10 +11,6 @@ import scala.collection.mutable.ArrayBuffer
 object TimePeriodCount {
    def filename:String  = "zhunian_TimePeriodCount_";
    def main(args:Array[String]) {
-     //    if (args.length < 1) {
-     //      println("Usage:SparkWordCount FileName");
-     //      System.exit(1);
-     //    }
      val conf = new SparkConf().setAppName("zhunian_TimePeriodCount");
      val sc = new SparkContext(conf);
      val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
@@ -31,29 +27,12 @@ object TimePeriodCount {
 //     val pcDate3 = pcDate.filter(line => line.length == 1).map(line => (line(0).substring(22, 24) + ":" + "0"))
 
      //取时段+:+数量，存如到pcd4
-     val pcDate4 = pcDate.map(line => (line(0).substring(22, 24) + ":" + {
-       //println("line(0).substring(22, 24)=" + line(0).substring(22, 24))
-       if( line.length > 1){
-         line(1).split(",").length
-       }
-       else{
-         0
-       }
-     }))
-
+     val pcDate4 = pcDate.
+       filter(line => line.length > 1).
+       map(line => (line(0).substring(22, 24) + ":" + line(1).split(",").length)
+     )
      //pcd4分割：数组形式放入到pcd5
-     val pcDate5 = pcDate4.map(line => ((line.split(":")(0),line.split(":")(1).toDouble)))
-
-     /*    var x = ""
-          pcDate.collect().foreach(e => {
-            if (e.length > 1) {
-               x += e(0) + e(1).split(",").length
-            }
-            else {
-              x += e(0) + "0"
-            }
-          });*/
-
+     val pcDate5 = pcDate4.map(line => ((line.toString.split(":")(0),line.toString.split(":")(1).toDouble)))
 
      //     pcDate.collect().foreach(e => {
      //       val (x) = e.length
@@ -109,8 +88,5 @@ object TimePeriodCount {
      //.coalesce(1, shuffle = true)把多个文件合并一个
      tpAvg.coalesce(1, shuffle = true).saveAsTextFile(filename +System.currentTimeMillis());
      println("Word Count program running results are successfully saved.");
-
-
    }
-
 }
