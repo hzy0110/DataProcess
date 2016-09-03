@@ -5,10 +5,10 @@ import org.apache.spark.{SparkConf, SparkContext}
  * 计算每个人的出勤次数（每时段算1次）
  * Created by Hzy on 2016/2/17.
  */
-object PeopleCount {
-  def filename:String  = "zhunian_PeopleCount_";
+object PeopleTimePeriodCount {
+  def filename:String  = "zhunian_PeopleTimePeriodCount_";
   def main(args:Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_PeopleCount");
+    val conf = new SparkConf().setAppName("zhunian_PeopleTimePeriodCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
     println("textFile.count()" + textFile.count())
