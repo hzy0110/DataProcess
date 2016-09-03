@@ -11,7 +11,6 @@ object PeopleTimePeriodCount {
     val conf = new SparkConf().setAppName("zhunian_PeopleTimePeriodCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
-    println("textFile.count()" + textFile.count())
 /*    var mapfirst = textFile.flatMap(line => line.split("-")(1))
     println("mapfirst.count()" + mapfirst.count())
     var mapfirst1 = textFile.flatMap(line => line.split("-"))

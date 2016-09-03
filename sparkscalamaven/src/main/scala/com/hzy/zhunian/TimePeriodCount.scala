@@ -14,7 +14,6 @@ object TimePeriodCount {
      val conf = new SparkConf().setAppName("zhunian_TimePeriodCount");
      val sc = new SparkContext(conf);
      val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
-     println("-------------------textFile.count()=" + textFile.count())
 
      val tpDate = textFile.map(line => line.substring(22, 24))
      //val pcDate = textFile.map(line => line.split("-")(1).split(","))
