@@ -14,9 +14,9 @@ object TimePeriodPeopleCount {
      val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
      val pcDate = textFile.map(line => line.split("-")).
      filter(line => line.length > 1).
-       map(line => (line(0).substring(22, 24) + ":" + line(1))).
-       map(line => (line.split(":")(0), line.split(":")(1).split(","))).
-       flatMap(line => (line._2.map(l2 => line._1+ l2))).
+       map(line => (line(0).substring(22, 24) + ":" + line(1))).//拼接时段和人员
+       map(line => (line.split(":")(0), line.split(":")(1).split(","))).//拆分时段和分割人员
+       flatMap(line => (line._2.map(l2 => line._1+ l2))).//把人员单个拆分到一个数组
        map(line => (line,1)).
        reduceByKey((a, b) => a + b).
        sortByKey()

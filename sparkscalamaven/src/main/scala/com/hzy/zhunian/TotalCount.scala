@@ -25,7 +25,7 @@ object TotalCount {
     //总人数去重
     val propleTotalCountD = textFile.map(line => line.split("-")).
     filter(line =>line.length > 1).
-      flatMap(line => line(1).split(",")).distinct().count();
+      flatMap(line => line(1).split(",")).distinct().count()
 
 /*    val timePeriodTotalCount = textFile.map(line => line.split("-")).
     filter(line =>line.length > 1).
