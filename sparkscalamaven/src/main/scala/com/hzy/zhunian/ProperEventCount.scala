@@ -12,10 +12,10 @@ object ProperEventCount {
   def main(args: Array[String]) {
     val conf = new SparkConf().setAppName("zhunian_DateEventYearCount");
     val sc = new SparkContext(conf);
-    val textFile = sc.textFile("/zhunian/zhunian_simple.txt");
+    val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
 
     //计算每个城区的场次
-    val peCount = textFile.map(line => (line.substring(18,21),1)). //去重场次
+    val peCount = simpleFile.map(line => (line.substring(19,21),1)). //去重场次
      reduceByKey((a, b) => a + b).sortBy(_._2, false) //获取月份
 
     peCount.coalesce(1, shuffle = true).saveAsTextFile(filename + System.currentTimeMillis());
