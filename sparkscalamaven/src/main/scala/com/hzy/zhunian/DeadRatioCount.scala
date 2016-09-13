@@ -10,7 +10,7 @@ object DeadRatioCount {
 
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_DateEventYearCount");
+    val conf = new SparkConf().setAppName("zhunian_DeadRatioCount");
     val sc = new SparkContext(conf);
     val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
 
@@ -20,7 +20,7 @@ object DeadRatioCount {
     val fCount = simpleFile.map(line => (line.split("_")(1).split("!")(0), 1)).filter(line => line._1 == "女").count.toDouble
 
     val selfBelieveCount = simpleFile.map(line => (line.split("!")(1).split("~")(0), 1)).filter(line => line._1 == "本有").count.toDouble
-    val familyBelieveCount = simpleFile.map(line => (line.split("!")(1).split("~")(1), 1)).filter(line => line._1 == "属有").count.toDouble
+    val familyBelieveCount = simpleFile.map(line => (line.split("!")(1).split("~")(1), 1)).filter(line => line._1 == "属有;").count.toDouble
 
     val mRatio = mCount / lineCount
     val fRatio = fCount / lineCount
