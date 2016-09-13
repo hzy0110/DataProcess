@@ -10,13 +10,13 @@ object EventAvg {
   def filename: String = "zhunian_EventAvg_";
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_Event");
+    val conf = new SparkConf().setAppName("zhunian_EventAvg");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
 
 
     //计算每行人数
-    val znpCount = textFile.map(line => (line.split(":")(0),line.split(",").length.toDouble)).reduceByKey((a, b) => a + b)
+    val znpCount = textFile.filter(line => line.split("-").length > 1).map(line => (line.split(":")(0),line.split(",").length.toDouble)).reduceByKey((a, b) => a + b)
     //获取每场时段数量
     val zndCount = textFile.map(line => line.split(":")(0)).map(word => (word, 1.toDouble)).reduceByKey((a, b) => a + b)
 
