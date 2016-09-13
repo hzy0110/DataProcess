@@ -10,7 +10,7 @@ object DeadPeopleCount {
 
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_ProperEventCount");
+    val conf = new SparkConf().setAppName("zhunian_DeadPeopleCount");
     val sc = new SparkContext(conf);
     val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
     val detailedFile = sc.textFile("/zhunian/zhunian_detailed.txt");
@@ -28,20 +28,19 @@ object DeadPeopleCount {
     val wyData = wySimpleData.join(detailedData).map(line => line._2._2.split("-"))
     val yyData = yySimpleData.join(detailedData).map(line => line._2._2.split("-"))
 
-
     val wwDateCount = wwData.count().toDouble
     val ywDateCount = ywData.count().toDouble
     val wyDateCount = wyData.count().toDouble
     val yyDateCount = yyData.count().toDouble
 
-    val wwPeopleCount = wwData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble//计算西湖区人数
-    val ywPeopleCount = ywData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble//计算上城区人数
-    val wyPeopleCount = wyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble//计算江干区人数
-    val yyPeopleCount = yyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble//计算拱墅区人数
+    val wwPeopleCount = wwData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
+    val ywPeopleCount = ywData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
+    val wyPeopleCount = wyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
+    val yyPeopleCount = yyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
 
-    println("本无~属无日均人数=" + wwPeopleCount / wwDateCount * 8)
-    println("本有~属无日均人数=" + ywPeopleCount / ywDateCount * 8)
-    println("本无~属有日均人数=" + wyPeopleCount / wyDateCount * 8)
-    println("本有~属有日均人数=" + yyPeopleCount / yyDateCount * 8)
+    println("本无~属无日均人数=" + wwPeopleCount / wwDateCount * 8 + " 本无~属无日均人数=" + wwSimpleData.count)
+    println("本有~属无日均人数=" + ywPeopleCount / ywDateCount * 8 + " 本有~属无日均人数=" + ywSimpleData.count)
+    println("本无~属有日均人数=" + wyPeopleCount / wyDateCount * 8 + " 本无~属有日均人数=" + wySimpleData.count)
+    println("本有~属有日均人数=" + yyPeopleCount / yyDateCount * 8 + " 本有~属有日均人数=" + yySimpleData.count)
   }
 }
