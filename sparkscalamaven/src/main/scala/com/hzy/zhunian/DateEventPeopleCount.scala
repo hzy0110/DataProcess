@@ -7,10 +7,10 @@ import org.apache.spark.{SparkConf, SparkContext}
   * Created by Hzy on 2016/2/17.
   */
 object DateEventPeopleCount {
-  def filename: String = "zhunian_DateEventYearCount_";
+  def filename: String = "zhunian_DateEventPeopleCount_";
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_DateEventYearCount");
+    val conf = new SparkConf().setAppName("zhunian_DateEventPeopleCount");
     val sc = new SparkContext(conf);
     val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
 

@@ -9,7 +9,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object DeadAgeCount {
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("zhunian_DateEventYearCount");
+    val conf = new SparkConf().setAppName("zhunian_DeadAgeCount");
     val sc = new SparkContext(conf);
     val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
 
