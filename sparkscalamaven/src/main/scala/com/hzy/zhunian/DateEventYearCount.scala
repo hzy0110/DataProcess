@@ -16,7 +16,7 @@ object DateEventYearCount {
 
     //计算每年场次数
     val deyCount = textFile.map(line => (line.split(":")(0))).distinct(). //去重场次
-      map(line => (line.substring(7,11) ,1)).reduceByKey((a, b) => a + b) //获取年份
+      map(line => (line.substring(8,12) ,1)).reduceByKey((a, b) => a + b) //获取年份
 
     deyCount.coalesce(1, shuffle = true).saveAsTextFile(filename +System.currentTimeMillis());
     println("Word Count program running results are successfully saved.");

@@ -15,7 +15,7 @@ object ProperPeopleCount {
     val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
 
     //获取每个城区场次数
-    val peCount = simpleFile.map(line => (line.substring(20,22),1)).
+    val peCount = simpleFile.map(line => (line.substring(21,23),1)).
      reduceByKey((a, b) => a + b).sortBy(_._2, false)
 
     peCount.coalesce(1, shuffle = true).saveAsTextFile(filename + System.currentTimeMillis());

@@ -28,7 +28,7 @@ object TimePeriodCount {
      //取时段+:+数量，存如到pcd4
      val pcDate4 = pcDate.
        filter(line => line.length > 1).
-       map(line => (line(0).substring(22, 24) + ":" + line(1).split(",").length)
+       map(line => (line(0).substring(23, 25) + ":" + line(1).split(",").length)
      )
      //pcd4分割：数组形式放入到pcd5
      val pcDate5 = pcDate4.map(line => ((line.toString.split(":")(0),line.toString.split(":")(1).toDouble)))

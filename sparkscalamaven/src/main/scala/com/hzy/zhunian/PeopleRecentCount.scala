@@ -17,14 +17,14 @@ object PeopleRecentCount {
       filter(line => line.length > 1). //过滤无人员行
       map(line => (line(0).split(":")(0),line(1))). //取得场次名次
        sortBy(_._1,false). //倒序场次名
-       take(1).map(line => line._1.substring(4,6)) //取最后一场No数
+       take(1).map(line => line._1.substring(4,7)) //取最后一场No数
 
     //设定最近场次数
     val no = evDate(0).toInt - 10;
 
     val pcDate = textFile.map(line => line.split("-")).
      filter(line => line.length > 1).
-     filter(line => line(0).substring(4,6).toInt > no).
+     filter(line => line(0).substring(4,7).toInt > no).
        //map(line => (line(0).split(":")(0) + ":" + line(1))).//拼接时段和人员
        //map(line => (line.split(":")(0), line.split(":")(1).split(","))).//拆分时段和分割人员
        flatMap(line => (line(1).split(","))).distinct()//把人员单个拆分到一个数组

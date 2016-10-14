@@ -17,7 +17,7 @@ object DateEventMonthCount {
 
     //计算每年场次数
     val demCount = textFile.map(line => (line.split(":")(0))).distinct(). //去重场次
-      map(line => (line.substring(12,14) ,1)).reduceByKey((a, b) => a + b).sortBy(_._2, false) //获取月份
+      map(line => (line.substring(13,15) ,1)).reduceByKey((a, b) => a + b).sortBy(_._2, false) //获取月份
 
     demCount.coalesce(1, shuffle = true).saveAsTextFile(filename + System.currentTimeMillis());
     println("Word Count program running results are successfully saved.");
