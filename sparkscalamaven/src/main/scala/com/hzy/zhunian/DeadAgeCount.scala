@@ -13,7 +13,7 @@ object DeadAgeCount {
     val sc = new SparkContext(conf);
     val simpleFile = sc.textFile("/zhunian/zhunian_simple.txt");
 
-    val daCount = simpleFile.map(line => line.split("#")(1).split("_")(0).toInt)
+    val daCount = simpleFile.map(line => line.split("#")(1).split("_")(0).toInt).filter(line => line != 0)
     val daAvg =  daCount.reduce((a, b) => a + b).toDouble / simpleFile.count().toDouble
     val daMax = daCount.max
     val daMin = daCount.min

@@ -24,6 +24,7 @@ object DeadPeopleCount {
     val detailedData = detailedFile.map(line => (line.split(":")(0), line))
 
     val wwData = wwSimpleData.join(detailedData).map(line => line._2._2.split("-"))
+    val wwData4 = wwSimpleData.join(detailedData).map(line => line._2._2.split("-")).filter(line => line(0).split(":")(0) == "(No.066)2015年05月19日")
     val ywData = ywSimpleData.join(detailedData).map(line => line._2._2.split("-"))
     val wyData = wySimpleData.join(detailedData).map(line => line._2._2.split("-"))
     val yyData = yySimpleData.join(detailedData).map(line => line._2._2.split("-"))
@@ -38,9 +39,9 @@ object DeadPeopleCount {
     val wyPeopleCount = wyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
     val yyPeopleCount = yyData.filter(line => line.length > 1).map(line => line(1).split(",").length).reduce((a, b) => a + b).toDouble
 
-    println("本无~属无日均人数=" + wwPeopleCount / wwDateCount * 8 + " 本无~属无日均人数=" + wwSimpleData.count)
-    println("本有~属无日均人数=" + ywPeopleCount / ywDateCount * 8 + " 本有~属无日均人数=" + ywSimpleData.count)
-    println("本无~属有日均人数=" + wyPeopleCount / wyDateCount * 8 + " 本无~属有日均人数=" + wySimpleData.count)
-    println("本有~属有日均人数=" + yyPeopleCount / yyDateCount * 8 + " 本有~属有日均人数=" + yySimpleData.count)
+    println("本无~属无日均人数=" + wwPeopleCount / wwDateCount * 8 + " 本无~属无场次数=" + wwSimpleData.count + " 本无~属无场均人数=" + wwPeopleCount /wwSimpleData.count)
+    println("本有~属无日均人数=" + ywPeopleCount / ywDateCount * 8 + " 本有~属无场次数=" + ywSimpleData.count + " 本有~属无场均人数=" + ywPeopleCount /ywSimpleData.count)
+    println("本无~属有日均人数=" + wyPeopleCount / wyDateCount * 8 + " 本无~属有场次数=" + wySimpleData.count + " 本无~属有场均人数=" +  wyPeopleCount / wySimpleData.count)
+    println("本有~属有日均人数=" + yyPeopleCount / yyDateCount * 8 + " 本有~属有场次数=" + yySimpleData.count + " 本有~属有场均人数=" + yyPeopleCount /  yySimpleData.count)
   }
 }
