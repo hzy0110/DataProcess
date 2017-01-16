@@ -11,8 +11,14 @@ object AttendanceRatioCount {
 
   def main(args:Array[String]) {
     val conf = new SparkConf().setAppName("zhunian_AttendanceRatioCount");
+    conf.setMaster("spark://192.168.3.185:17077")
+    conf.set("spark.executor.memory","512M")
+    //conf.set("spark.executor.extraClassPath","/sparkscalamaven/target/")
+    //conf.setJars(Array("/sparkscalamaven/target/sparkscalamaven-1.0-SNAPSHOT.jar")) //这行没有写,加上就好了
+
     val sc = new SparkContext(conf);
-    val textFile = sc.textFile("/zhunian/zhunian_detailed.txt");
+    sc.addJar("/sparkscalamaven/target/sparkscalamaven-1.0-SNAPSHOT.jar")
+    val textFile = sc.textFile("hdfs:/zhunian/zhunian_detailed.txt");
     val eDate = textFile.map(line => line.split(":")(0)).distinct().count().toDouble
     val pcDate = textFile.map(line => line.split("-")).
       filter(line => line.length > 1).

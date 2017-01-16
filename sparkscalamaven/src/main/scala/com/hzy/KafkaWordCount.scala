@@ -1,15 +1,15 @@
 package com.hzy
 
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.kafka.KafkaUtils
-import org.apache.spark.streaming.{Minutes, Seconds, StreamingContext}
+/*import org.apache.spark.streaming.kafka.KafkaUtils
+import org.apache.spark.streaming.{Minutes, Seconds, StreamingContext}*/
 
 /**
  * Created by zy on 2016/8/24.
  */
 object KafkaWordCount {
   def main(args: Array[String]) {
-    if (args.length < 4) {
+    /*if (args.length < 4) {
       System.err.println("Usage: KafkaWordCount <zkQuorum> <group> <topics> <numThreads>")
       System.exit(1)
     }
@@ -33,6 +33,6 @@ object KafkaWordCount {
     println("---------------------------------start-------------------------------------------")
     ssc.start()
     ssc.awaitTermination()
-    println("---------------------------------awaitTermination-------------------------------------------")
+    println("---------------------------------awaitTermination-------------------------------------------")*/
   }
 }

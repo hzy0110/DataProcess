@@ -1,12 +1,13 @@
 package com.hzy
 
 import org.apache.spark._
-import org.apache.spark.streaming._
-import org.apache.spark.streaming.StreamingContext._
+/*import org.apache.spark.streaming._
+import org.apache.spark.streaming.StreamingContext._*/
 /**
  * Created by zy on 2016/8/22.
  */
 object NetworkWordCount {
+/*
 
   // Create a local StreamingContext with two working thread and batch interval of 1 second.
   // The master requires 2 cores to prevent from a starvation scenario.
@@ -30,6 +31,7 @@ object NetworkWordCount {
 
   ssc.start()             // Start the computation
   ssc.awaitTermination()  // Wait for the computation to terminate
+*/
 
 
 

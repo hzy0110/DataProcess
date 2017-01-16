@@ -26,11 +26,11 @@ One way to use ScalaTest is to help make JUnit or TestNG tests more
 clear and concise. Here's an example:
 */
 import scala.collection.mutable.Stack
-import org.scalatest.Assertions
+//import org.scalatest.Assertions
 import org.junit.Test
 
-class StackSuite extends Assertions {
-
+class StackSuite /*extends Assertions*/ {
+/*
   @Test def stackShouldPopValuesIinLastInFirstOutOrder() {
     val stack = new Stack[Int]
     stack.push(1)
@@ -105,5 +105,5 @@ class ExampleSpec extends FunSpec {
         emptyStack.pop()
       }
     }
-  }
+  }*/
 }

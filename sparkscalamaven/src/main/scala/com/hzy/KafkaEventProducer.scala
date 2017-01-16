@@ -1,7 +1,7 @@
 package com.hzy
 
 import java.util.Properties
-import kafka.producer.ProducerConfig
+/*import kafka.producer.ProducerConfig
 import kafka.producer.ProducerConfig
 
 import scala.util.Properties
@@ -9,7 +9,7 @@ import org.codehaus.jettison.json.JSONObject
 import kafka.javaapi.producer.Producer
 import kafka.producer.KeyedMessage
 import kafka.producer.KeyedMessage
-import kafka.producer.ProducerConfig
+import kafka.producer.ProducerConfig*/
 import scala.util.Random
 /**
  * Created by zy on 2016/8/22.
@@ -50,7 +50,7 @@ object KafkaEventProducer {
     val props = new Properties()
     props.put("metadata.broker.list", brokers)
     props.put("serializer.class", "kafka.serializer.StringEncoder")
-
+/*
     val kafkaConfig = new ProducerConfig(props)
     val producer = new Producer[String, String](kafkaConfig)
 
@@ -68,6 +68,6 @@ object KafkaEventProducer {
       println("Message sent: " + event)
 
       Thread.sleep(200)
-    }
+    }*/
   }
 }
