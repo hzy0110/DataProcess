@@ -12,11 +12,16 @@ object HbaseLoad {
 
   def main(args:Array[String]) {
     //Spark环境初始化
-    val sparkConf = new SparkConf().setAppName("ReadFromHBase")//.set("spark.cores.max","2").setMaster("spark://10.10.13.178:18080")
+    val conf = new SparkConf().setAppName("ReadFromHBase")//.set("spark.cores.max","2").setMaster("spark://10.10.13.178:18080")
     //Standalone 模式
     //sparkConf.setMaster("spark://10.10.13.178:7077")//.set("spark.ui.port‌​","7077");
-    sparkConf.setMaster("yarn-client")//.set("spark.ui.port‌​","7077");
-    val sparkContext = new SparkContext(sparkConf)
+    conf.setMaster("yarn-client")//.set("spark.ui.port‌​","7077");
+    conf.set("spark.executor.memory","128M")
+    conf.set("spark.yarn.appMasterEnv.CLASSPATH",
+      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
+    conf.setJars(List("hdfs://ods18/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar"))
+
+    val sparkContext = new SparkContext(conf)
 
     LogManager.getRootLogger.setLevel(Level.WARN)
     //val sqlContext = new org.apache.spark.sql.SQLContext(sparkContext)
@@ -25,7 +30,8 @@ object HbaseLoad {
 
     //通过zookeeper获取HBase连接
     val hbaseConf = HBaseConfiguration.create()
-    hbaseConf.set("hbase.zookeeper.quorum", "192.168.3.185")
+    hbaseConf.set("hbase.zookeeper.quorum", "ods18")
+
     //hbaseConf.addResource(new org.apache.hadoop.fs.Path(s"file://$hbaseConf")) //读取hbase配置文件
 
 
