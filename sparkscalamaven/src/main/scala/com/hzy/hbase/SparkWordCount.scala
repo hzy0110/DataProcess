@@ -25,10 +25,12 @@ object SparkWordCount {
      */
     val conf = new SparkConf()
     conf.setAppName("SparkWordCount")
-    conf.setMaster("spark://ods18:7077")
-    //conf.setMaster("yarn-client")
+    //conf.setMaster("spark://ods18:7077")
+    conf.setMaster("yarn-client")
     //conf.setMaster("spark://192.168.3.185:17077")
     conf.set("spark.executor.memory","128M")
+    conf.set("spark.yarn.appMasterEnv.CLASSPATH",
+      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
     conf.setJars(List("hdfs://ods18/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar"))
 //    conf.set("spark.ui.port‌​","7077");
     //定义Spark的上下文
