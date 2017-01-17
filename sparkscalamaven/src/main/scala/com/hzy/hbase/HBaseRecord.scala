@@ -1,5 +1,5 @@
 package com.hzy.hbase
-/*import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hbase.{ HBaseConfiguration, HColumnDescriptor, HTableDescriptor }
 import org.apache.hadoop.hbase.client.{ HBaseAdmin, HTable, Put }
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
@@ -8,9 +8,9 @@ import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 //import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.datasources.hbase._
+//import org.apache.spark.sql.datasources.hbase._
 import org.apache.hadoop.hbase.spark.datasources.HBaseScanPartition
-import org.apache.hadoop.hbase.util.Bytes*/
+import org.apache.hadoop.hbase.util.Bytes
 /**
   * Created by hzy on 2017/1/10.
   */
@@ -28,9 +28,13 @@ object HBaseRecord {
 
 object Test {
   def main(args: Array[String]) {
-/*
+
     val conf = new SparkConf().setAppName("test spark sql");
     conf.setMaster("yarn-client");
+    conf.set("spark.executor.memory","128M")
+    conf.set("spark.yarn.appMasterEnv.CLASSPATH",
+      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
+    conf.setJars(List("hdfs://ods18/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar"))
     val sc = new SparkContext(conf) //new SparkContext(conf)//
     val config = HBaseConfiguration.create()
     //config.addResource("/home/hadoop/hbase-1.2.2/conf/hbase-site.xml");
@@ -38,18 +42,18 @@ object Test {
     val hbaseContext = new HBaseContext(sc, config, null)
 
     def catalog = s"""{
-                     |"table":{"namespace":"default", "name":"table4"},
+                     |"table":{"namespace":"default", "name":"serv_msg"},
                      |"rowkey":"key",
                      |"columns":{
                      |"col0":{"cf":"rowkey", "col":"key", "type":"string"},
-                     |"col1":{"cf":"cf1", "col":"col1", "type":"int"}
+                     |"col1":{"cf":"cf1", "col":"serv_id", "type":"string"}
                      |}
                      |}""".stripMargin
 
     val sqlContext = new SQLContext(sc);
     import sqlContext.implicits._
 
-    def withCatalog(cat: String): DataFrame = {
+/*    def withCatalog(cat: String): DataFrame = {
       sqlContext
         .read
         .options(Map(HBaseTableCatalog.tableCatalog -> cat))
