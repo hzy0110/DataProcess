@@ -1,68 +1,68 @@
 package com.hzy.hbase
-import org.apache.hadoop.fs.Path
-import org.apache.hadoop.hbase.{ HBaseConfiguration, HColumnDescriptor, HTableDescriptor }
-import org.apache.hadoop.hbase.client.{ HBaseAdmin, HTable, Put }
-import org.apache.hadoop.hbase.mapreduce.TableInputFormat
-import org.apache.hadoop.hbase.spark.HBaseContext
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.sql._
-//import org.apache.spark.sql.SQLContext
-//import org.apache.spark.sql.datasources.hbase._
-import org.apache.hadoop.hbase.spark.datasources.HBaseScanPartition
-import org.apache.hadoop.hbase.util.Bytes
+
+
+import org.apache.spark.sql.{SQLContext, _}
+import org.apache.spark.sql.execution.datasources.hbase._
+import org.apache.spark.{SparkConf, SparkContext}
 /**
   * Created by hzy on 2017/1/10.
   */
-case class HBaseRecord(
-                        col0: String,
-                        col1: Int)
 
-object HBaseRecord {
-  def apply(i: Int, t: Int): HBaseRecord = {
-    val s = s"""row${"%03d".format(i)}"""
-    HBaseRecord(s,
-      i)
-  }
-}
 
 object Test {
+
+  val cat = s"""{
+               |"table":{"namespace":"default", "name":"serv_msg"},
+               |"rowkey":"key",
+               |"columns":{
+               |"col0":{"cf":"rowkey", "col":"key", "type":"string"},
+               |"col1":{"cf":"cf1", "col":"col1", "type":"string"},
+               |"col2":{"cf":"cf2", "col":"col2", "type":"double"},
+               |"col3":{"cf":"cf3", "col":"col3", "type":"float"},
+               |"col4":{"cf":"cf4", "col":"col4", "type":"int"},
+               |"col5":{"cf":"cf5", "col":"col5", "type":"bigint"},
+               |"col6":{"cf":"cf6", "col":"col6", "type":"smallint"},
+               |"col7":{"cf":"cf7", "col":"col7", "type":"string"},
+               |"col8":{"cf":"cf8", "col":"col8", "type":"tinyint"}
+               |}
+               |}""".stripMargin
+
   def main(args: Array[String]) {
+    val sparkConf = new SparkConf().setAppName("HBaseTest")
+    sparkConf.setMaster("spark://master:7077")
+    //            sparkConf.setMaster("yarn-client");
+    //    sparkConf.set("spark.yarn.appMasterEnv.CLASSPATH",
+    //      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
+    sparkConf.set("spark.executor.memory","256M")
+    sparkConf.setJars(List(
+      //      "hdfs://master/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar",
+      //      "hdfs://master/zhunian/json4s-ast_2.10-3.2.10.jar",
+      //      "hdfs://master/zhunian/json4s-core_2.10-3.2.10.jar",
+      //      "hdfs://master/zhunian/json4s-jackson_2.10-3.2.10.jar",
+      "hdfs://master/zhunian/shc-core-1.0.2-1.6-s_2.10-SNAPSHOT.jar",
+      "hdfs://master/zhunian/shc-examples-1.0.2-1.6-s_2.10-SNAPSHOT.jar"))
+    val sc = new SparkContext(sparkConf)
+    val sqlContext = new SQLContext(sc)
 
-    val conf = new SparkConf().setAppName("test spark sql");
-    conf.setMaster("yarn-client");
-    conf.set("spark.executor.memory","128M")
-    conf.set("spark.yarn.appMasterEnv.CLASSPATH",
-      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
-    conf.setJars(List("hdfs://ods18/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar"))
-    val sc = new SparkContext(conf) //new SparkContext(conf)//
-    val config = HBaseConfiguration.create()
-    //config.addResource("/home/hadoop/hbase-1.2.2/conf/hbase-site.xml");
-    //config.set("hbase.zookeeper.quorum", "node1,node2,node3");spark://localhost:18080
-    val hbaseContext = new HBaseContext(sc, config, null)
-
-    def catalog = s"""{
-                     |"table":{"namespace":"default", "name":"serv_msg"},
-                     |"rowkey":"key",
-                     |"columns":{
-                     |"col0":{"cf":"rowkey", "col":"key", "type":"string"},
-                     |"col1":{"cf":"cf1", "col":"serv_id", "type":"string"}
-                     |}
-                     |}""".stripMargin
-
-    val sqlContext = new SQLContext(sc);
     import sqlContext.implicits._
 
-/*    def withCatalog(cat: String): DataFrame = {
+    def withCatalog(cat: String): DataFrame = {
       sqlContext
         .read
-        .options(Map(HBaseTableCatalog.tableCatalog -> cat))
-        .format("org.apache.hadoop.hbase.spark")
+        .options(Map(HBaseTableCatalog.tableCatalog->cat))
+//                .format("org.apache.hadoop.hbase.spark")
+        .format("org.apache.spark.sql.execution.datasources.hbase")
         .load()
     }
-    val df = withCatalog(catalog)
 
-    val res = df.select("col1")
+
+    val df = withCatalog(cat)
+    df.show
+    df.registerTempTable("serv_msg")
+    //    val c = sqlContext.sql("select count(col1) from table1 where col0 < 'row050'")
+    val c = sqlContext.sql("select col1 from serv_msg")
+    c.show()
+    /*val res = df.select("col1")
     //res.save("hdfs://master:9000/user/yang/a.txt")
     res.show()
     df.registerTempTable("table4")
