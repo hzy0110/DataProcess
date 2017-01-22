@@ -29,18 +29,19 @@ object Test {
 
   def main(args: Array[String]) {
     val sparkConf = new SparkConf().setAppName("HBaseTest")
-    sparkConf.setMaster("spark://master:7077")
-    //            sparkConf.setMaster("yarn-client");
-    //    sparkConf.set("spark.yarn.appMasterEnv.CLASSPATH",
-    //      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
+    //    sparkConf.setMaster("spark://master:7077")
+    sparkConf.setMaster("yarn-client");
+    sparkConf.set("spark.yarn.appMasterEnv.CLASSPATH",
+      "$CLASSPATH:/opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/*")
     sparkConf.set("spark.executor.memory","256M")
     sparkConf.setJars(List(
-      //      "hdfs://master/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar",
-      //      "hdfs://master/zhunian/json4s-ast_2.10-3.2.10.jar",
-      //      "hdfs://master/zhunian/json4s-core_2.10-3.2.10.jar",
-      //      "hdfs://master/zhunian/json4s-jackson_2.10-3.2.10.jar",
+      "hdfs://master/zhunian/sparkscalamaven-1.0-SNAPSHOT.jar",
+      //            "hdfs://master/zhunian/json4s-ast_2.10-3.2.10.jar",
+      //            "hdfs://master/zhunian/json4s-core_2.10-3.2.10.jar",
+      //            "hdfs://master/zhunian/json4s-jackson_2.10-3.2.10.jar",
       "hdfs://master/zhunian/shc-core-1.0.2-1.6-s_2.10-SNAPSHOT.jar",
-      "hdfs://master/zhunian/shc-examples-1.0.2-1.6-s_2.10-SNAPSHOT.jar"))
+      "hdfs://master/zhunian/shc-examples-1.0.2-1.6-s_2.10-SNAPSHOT.jar",
+      "hdfs://master/zhunian/hbase-client-1.2.0-cdh5.9.0.jar"))
     val sc = new SparkContext(sparkConf)
     val sqlContext = new SQLContext(sc)
 

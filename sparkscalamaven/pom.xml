@@ -64,6 +64,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-assembly_2.10</artifactId>
+            <version>${spark.cdh.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -163,13 +168,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-spark</artifactId>
-            <version>${hbase.version}</version>
-        </dependency>
-
         <!-- scala -->
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -203,12 +201,12 @@
             <version>2.6.0-cdh5.9.0</version>
         </dependency>
 
-
+-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-yarn-server-web-proxy</artifactId>
             <version>${yarn.binary.version}</version>
-        </dependency>-->
+        </dependency>
 
 
 
